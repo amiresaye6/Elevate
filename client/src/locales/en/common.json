@@ -6,6 +6,27 @@
     "home": "Home",
     "login": "Login",
     "register": "Register",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "find_mentors": "Find Mentors",
+    "student_dashboard": "Student Dashboard",
+    "mentor_dashboard": "Mentor Dashboard",
+    "admin_dashboard": "Admin Dashboard",
+    "profile": "Profile",
+    "profile_settings": "Profile Settings",
+    "logout": "Logout"
+  },
+  "footer": {
+    "all_rights_reserved": "All rights reserved."
+  },
+  "errors": {
+    "not_found_subtitle": "Page Not Found",
+    "not_found_description": "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.",
+    "forbidden_subtitle": "Access Forbidden",
+    "forbidden_description": "You do not have the permissions required to access this resource. Please make sure you are logged in with the correct role.",
+    "server_error_subtitle": "Server Error",
+    "server_error_description": "Something went wrong on our end. Please try again later or contact support if the issue persists.",
+    "go_back_home": "Go Back Home",
+    "go_home": "Go Home",
+    "retry": "Retry Connection"
   }
 }

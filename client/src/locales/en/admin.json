@@ -1,3 +1,7 @@
 {
-  "dashboard_title": "Admin Dashboard"
+  "portal_header": "Admin Portal",
+  "overview": "Overview",
+  "users_control": "Users Control",
+  "stack_settings": "Stack Settings",
+  "session_logs": "Session Logs"
 }

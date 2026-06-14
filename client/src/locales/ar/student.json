@@ -1,3 +1,6 @@
 {
-  "dashboard_title": "لوحة تحكم الطالب"
+  "portal_header": "بوابة الطالب",
+  "dashboard": "لوحة التحكم",
+  "sessions": "سجل الجلسات",
+  "profile_settings": "إعدادات الحساب"
 }

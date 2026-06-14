@@ -6,6 +6,27 @@
     "home": "الرئيسية",
     "login": "تسجيل الدخول",
     "register": "إنشاء حساب",
-    "dashboard": "لوحة التحكم"
+    "dashboard": "لوحة التحكم",
+    "find_mentors": "البحث عن موجهين",
+    "student_dashboard": "لوحة الطالب",
+    "mentor_dashboard": "لوحة الموجه",
+    "admin_dashboard": "لوحة المشرف",
+    "profile": "الحساب الشخصي",
+    "profile_settings": "إعدادات الحساب",
+    "logout": "تسجيل الخروج"
+  },
+  "footer": {
+    "all_rights_reserved": "كل الحقوق محفوظة."
+  },
+  "errors": {
+    "not_found_subtitle": "الصفحة غير موجودة",
+    "not_found_description": "الصفحة التي تبحث عنها ربما تم حذفها، أو تغير اسمها، أو أنها غير متاحة مؤقتاً.",
+    "forbidden_subtitle": "الدخول محظور",
+    "forbidden_description": "ليس لديك الصلاحيات الكافية للوصول إلى هذه الصفحة. يرجى التأكد من تسجيل الدخول بالصلاحية الصحيحة.",
+    "server_error_subtitle": "خطأ في خادم النظام",
+    "server_error_description": "حدث خطأ ما في أنظمتنا. يرجى المحاولة مرة أخرى لاحقاً أو الاتصال بالدعم الفني.",
+    "go_back_home": "العودة للرئيسية",
+    "go_home": "الرئيسية",
+    "retry": "إعادة المحاولة"
   }
 }

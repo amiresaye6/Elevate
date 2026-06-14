@@ -1,3 +1,7 @@
 {
-  "dashboard_title": "لوحة تحكم الموجه"
+  "portal_header": "بوابة الموجه",
+  "dashboard": "لوحة التحكم",
+  "availability": "إدارة المواعيد",
+  "sessions": "الجلسات",
+  "profile_settings": "إعدادات الحساب"
 }

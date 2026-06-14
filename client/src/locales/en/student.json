@@ -1,3 +1,6 @@
 {
-  "dashboard_title": "Student Dashboard"
+  "portal_header": "Student Portal",
+  "dashboard": "Dashboard",
+  "sessions": "Session History",
+  "profile_settings": "Profile Settings"
 }
