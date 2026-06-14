@@ -4,6 +4,6 @@ import { StacksService } from './stacks.service';
 
 @Module({
   controllers: [StacksController],
-  providers: [StacksService]
+  providers: [StacksService],
 })
 export class StacksModule {}
