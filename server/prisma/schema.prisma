@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+enum Role {
+  ADMIN
+  MENTOR
+  STUDENT
+}
+
+enum SessionStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELED
+}
+
+model User {
+  id              Int              @id @default(autoincrement())
+  email           String           @unique
+  password        String
+  role            Role
+  isBlocked       Boolean          @default(false)
+  createdAt       DateTime         @default(now())
+
+  studentProfile  StudentProfile?
+  mentorProfile   MentorProfile?
+}
+
+model StudentProfile {
+  id          Int             @id @default(autoincrement())
+  userId      Int             @unique
+  name        String
+  createdAt   DateTime        @default(now())
+
+  user         User           @relation(fields: [userId], references: [id])
+
+  sessions     ReviewSession[]
+}
+
+model Stack {
+  id           Int             @id @default(autoincrement())
+  name         String          @unique
+  description  String
+
+  mentors      MentorProfile[]
+}
+
+model MentorProfile {
+  id              Int                  @id @default(autoincrement())
+  userId          Int                  @unique
+  stackId         Int
+
+  name            String
+  title           String
+  bio             String
+
+  isVerified      Boolean              @default(false)
+
+  averageRating   Float                @default(0)
+
+  hourlyRate      Decimal              @db.Decimal(10,2)
+
+  user            User                 @relation(fields: [userId], references: [id])
+  stack           Stack                @relation(fields: [stackId], references: [id])
+  availability    MentorAvailability[]
+  sessions        ReviewSession[]
+}
+
+model MentorAvailability {
+  id           Int            @id @default(autoincrement())
+  mentorId     Int
+  dayOfWeek    String
+  startTime    String
+  endTime      String
+
+  mentor       MentorProfile  @relation(fields: [mentorId], references: [id])
+}
+
+model ReviewSession {
+  id                 Int              @id @default(autoincrement())
+  mentorId           Int
+  studentId          Int
+  startTime          DateTime
+  endTime            DateTime
+  description        String
+  status             SessionStatus
+  evaluationNotes    String?
+
+  mentor             MentorProfile    @relation(fields: [mentorId], references: [id])
+  student            StudentProfile   @relation(fields: [studentId], references: [id])
+  auditLog           SessionAuditLog?
+}
+
+model SessionAuditLog {
+  id                 Int            @id @default(autoincrement())
+  sessionId          Int            @unique
+  predictedTag       String
+  confidenceScore    Float
+  status             String
+  latencyMs          Int
+  errorMessage       String?
+
+  session            ReviewSession  @relation(fields: [sessionId], references: [id])
+}
