@@ -1,0 +1,11 @@
+{
+  "app_name": "Academic Mentorship Platform",
+  "theme_toggle": "Toggle Dark Mode",
+  "lang_toggle": "العربية",
+  "nav": {
+    "home": "Home",
+    "login": "Login",
+    "register": "Register",
+    "dashboard": "Dashboard"
+  }
+}
