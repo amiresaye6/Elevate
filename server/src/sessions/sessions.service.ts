@@ -232,6 +232,28 @@ export class SessionsService {
     };
   }
 
+  async getSessionById(id: number) {
+    const session = await this.prisma.reviewSession.findUnique({
+      where: { id },
+      include: {
+        mentor: {
+          include: { stack: true },
+        },
+        student: true,
+        auditLog: true,
+      },
+    });
+
+    if (!session) {
+      throw new NotFoundException(`Session with ID ${id} not found.`);
+    }
+
+    return {
+      success: true,
+      data: session,
+    };
+  }
+
   async updateSessionStatus(
     id: number,
     dto: UpdateStatusDto,

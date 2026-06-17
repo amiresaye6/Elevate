@@ -70,6 +70,11 @@ export class SessionsController {
     );
   }
 
+  @Get(':id')
+  async getSessionById(@Param('id', ParseIntPipe) id: number) {
+    return await this.sessionsService.getSessionById(id);
+  }
+
   @Put(':id/status')
   async updateSessionStatus(
     @Param('id', ParseIntPipe) id: number,
