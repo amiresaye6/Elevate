@@ -40,45 +40,75 @@ If you cannot classify it, use "${mentorStack}" as the predictedTag and status "
 Session Description: "${description}"
       `;
 
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            contents: [
-              {
-                parts: [
-                  {
-                    text: prompt,
-                  },
-                ],
-              },
-            ],
-          }),
-        },
-      );
+      // Try multiple Gemini models in case the default one is overloaded / experiencing 503
+      const models = [
+        'gemini-2.5-flash',
+        'gemini-2.0-flash',
+        'gemini-flash-latest',
+        'gemini-pro-latest',
+      ];
+      let lastError: any = null;
+      let parsedResponse: any = null;
 
-      if (!response.ok) {
-        throw new Error(`Gemini API returned status ${response.status}`);
+      for (const model of models) {
+        let retries = 2; // Try twice per model
+        while (retries > 0) {
+          try {
+            const response = await fetch(
+              `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  contents: [
+                    {
+                      parts: [
+                        {
+                          text: prompt,
+                        },
+                      ],
+                    },
+                  ],
+                }),
+              },
+            );
+
+            if (!response.ok) {
+              const errBody = await response.json().catch(() => ({}));
+              throw new Error(`Gemini model ${model} returned status ${response.status}: ${JSON.stringify(errBody)}`);
+            }
+
+            const result = await response.json();
+            const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            const jsonText = text.replace(/```json|```/g, '').trim();
+            parsedResponse = JSON.parse(jsonText);
+            break; // Success! Break out of retry loop
+          } catch (e) {
+            lastError = e;
+            retries--;
+            if (retries > 0) {
+              await new Promise((resolve) => setTimeout(resolve, 500)); // Wait 500ms before retrying
+            }
+          }
+        }
+        if (parsedResponse) {
+          break; // Success! Break out of model loop
+        }
       }
 
-      const result = await response.json();
-      const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-
-      // Clean markdown code blocks from output if Gemini included them
-      const jsonText = text.replace(/```json|```/g, '').trim();
-      const parsed = JSON.parse(jsonText);
+      if (!parsedResponse) {
+        throw lastError || new Error('All Gemini models failed to respond.');
+      }
 
       return {
-        predictedTag: parsed.predictedTag || mentorStack,
+        predictedTag: parsedResponse.predictedTag || mentorStack,
         confidenceScore:
-          typeof parsed.confidenceScore === 'number'
-            ? parsed.confidenceScore
+          typeof parsedResponse.confidenceScore === 'number'
+            ? parsedResponse.confidenceScore
             : 0.85,
-        status: parsed.status || 'SUCCESS',
+        status: parsedResponse.status || 'SUCCESS',
       };
     } catch (error) {
       console.error('Error in Gemini classification:', error);
