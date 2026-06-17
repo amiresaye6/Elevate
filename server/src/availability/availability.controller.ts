@@ -24,7 +24,7 @@ interface RequestWithUser extends Request {
   };
 }
 
-@Controller('api/availability')
+@Controller('availability')
 export class AvailabilityController {
   constructor(private readonly availabilityService: AvailabilityService) {}
 
