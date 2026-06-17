@@ -3,7 +3,15 @@ import { PrismaClient, Role, SessionStatus } from '@prisma/client';
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import * as bcrypt from 'bcrypt';
 
-const adapter = new PrismaMariaDb(process.env.DATABASE_URL!);
+const adapter = new PrismaMariaDb({
+  host: process.env.DB_HOST || 'localhost',
+  port: Number(process.env.DB_PORT) || 3309,
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || 'root',
+  database: process.env.DB_NAME || 'elivate_db',
+  allowPublicKeyRetrieval: true,
+  connectionLimit: 10,
+});
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
@@ -18,6 +26,15 @@ async function main() {
   await prisma.studentProfile.deleteMany({});
   await prisma.user.deleteMany({});
   await prisma.stack.deleteMany({});
+
+  console.log('Resetting database auto-increment counters...');
+  await prisma.$executeRawUnsafe('ALTER TABLE SessionAuditLog AUTO_INCREMENT = 1;');
+  await prisma.$executeRawUnsafe('ALTER TABLE ReviewSession AUTO_INCREMENT = 1;');
+  await prisma.$executeRawUnsafe('ALTER TABLE MentorAvailability AUTO_INCREMENT = 1;');
+  await prisma.$executeRawUnsafe('ALTER TABLE MentorProfile AUTO_INCREMENT = 1;');
+  await prisma.$executeRawUnsafe('ALTER TABLE StudentProfile AUTO_INCREMENT = 1;');
+  await prisma.$executeRawUnsafe('ALTER TABLE User AUTO_INCREMENT = 1;');
+  await prisma.$executeRawUnsafe('ALTER TABLE Stack AUTO_INCREMENT = 1;');
 
   // 1. Seed Stacks
   const stacksData = [
