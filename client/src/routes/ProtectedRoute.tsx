@@ -7,8 +7,16 @@ interface ProtectedRouteProps {
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
   // Mock authentication check - checks localStorage for tokens
-  const token = localStorage.getItem('accessToken')
-  const userRole = localStorage.getItem('role') as 'student' | 'mentor' | 'admin' | null
+  let token = localStorage.getItem('accessToken')
+  let userRole = localStorage.getItem('role') as 'student' | 'mentor' | 'admin' | null
+
+  // Auto-login for development testing
+  if (!token) {
+    localStorage.setItem('accessToken', 'mock-student-token')
+    localStorage.setItem('role', 'student')
+    token = 'mock-student-token'
+    userRole = 'student'
+  }
 
   if (!token) {
     // Redirect to login if unauthenticated
