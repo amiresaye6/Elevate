@@ -1,0 +1,441 @@
+{
+  "info": {
+    "name": "Elevate - Session Booking Workflow",
+    "description": "Collection to test the newly implemented Session Booking Workflow endpoints on the Academic Mentorship Platform.\nBase URL is assumed to be http://localhost:1234/api.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Booking Sessions",
+      "item": [
+        {
+          "name": "Book Session (Success)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mentorId\": 2,\n  \"startTime\": \"2026-06-23T10:00:00\",\n  \"description\": \"Need help reviewing NestJS dependency injection patterns and controller setups.\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:1234/api/sessions/book",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "1234",
+              "path": [
+                "api",
+                "sessions",
+                "book"
+              ]
+            },
+            "description": "Successfully books a review session for a student with a verified mentor (Bruce Wayne) during his Tuesday availability slot (10:00 to 10:45)."
+          },
+          "response": []
+        },
+        {
+          "name": "Book Session (Conflict - Overlapping)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mentorId\": 2,\n  \"startTime\": \"2026-06-23T10:30:00\",\n  \"description\": \"Need help reviewing NestJS dependency injection patterns and controller setups.\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:1234/api/sessions/book",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "1234",
+              "path": [
+                "api",
+                "sessions",
+                "book"
+              ]
+            },
+            "description": "Attempts to book a slot that overlaps with the successful 10:00-10:45 booking. Should return a 409 Conflict error."
+          },
+          "response": []
+        },
+        {
+          "name": "Book Session (Outside Availability)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mentorId\": 2,\n  \"startTime\": \"2026-06-23T08:00:00\",\n  \"description\": \"Need help reviewing NestJS dependency injection patterns and controller setups.\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:1234/api/sessions/book",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "1234",
+              "path": [
+                "api",
+                "sessions",
+                "book"
+              ]
+            },
+            "description": "Attempts to book a slot outside of the mentor's scheduled availability (08:00 is outside of his 10:00-15:00 window). Should return 400 Bad Request."
+          },
+          "response": []
+        },
+        {
+          "name": "Book Session (Validation Failed - Description Min 20 Chars)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mentorId\": 2,\n  \"startTime\": \"2026-06-23T12:00:00\",\n  \"description\": \"Too short.\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:1234/api/sessions/book",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "1234",
+              "path": [
+                "api",
+                "sessions",
+                "book"
+              ]
+            },
+            "description": "Attempts to book with a description under 20 characters. Global ValidationPipe should intercept and return 400 Bad Request with details."
+          },
+          "response": []
+        },
+        {
+          "name": "Book Session (Transaction Rollback - fail-audit keyword)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mentorId\": 2,\n  \"startTime\": \"2026-06-23T13:00:00\",\n  \"description\": \"Need help with NestJS, triggers a fail-audit test keyword.\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:1234/api/sessions/book",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "1234",
+              "path": [
+                "api",
+                "sessions",
+                "book"
+              ]
+            },
+            "description": "Contains the 'fail-audit' keyword in the description. The AuditService will throw an error during classification, which should rollback the reviewSession creation, demonstrating transaction atomicity."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2. Get Sessions",
+      "item": [
+        {
+          "name": "Get My Sessions (Student)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:1234/api/sessions?role=student&profileId=1&status=SCHEDULED&page=1&limit=10",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "1234",
+              "path": [
+                "api",
+                "sessions"
+              ],
+              "query": [
+                {
+                  "key": "role",
+                  "value": "student",
+                  "description": "Simulates authenticated student role"
+                },
+                {
+                  "key": "profileId",
+                  "value": "1",
+                  "description": "Simulates authenticated student's profile ID"
+                },
+                {
+                  "key": "status",
+                  "value": "SCHEDULED",
+                  "description": "Filter by session status"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Target page"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Limit of items per page"
+                }
+              ]
+            },
+            "description": "Fetches a paginated list of sessions for the student."
+          },
+          "response": []
+        },
+        {
+          "name": "Get My Sessions (Mentor)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:1234/api/sessions?role=mentor&profileId=2&status=COMPLETED&page=1&limit=10",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "1234",
+              "path": [
+                "api",
+                "sessions"
+              ],
+              "query": [
+                {
+                  "key": "role",
+                  "value": "mentor",
+                  "description": "Simulates authenticated mentor role"
+                },
+                {
+                  "key": "profileId",
+                  "value": "2",
+                  "description": "Simulates authenticated mentor's profile ID"
+                },
+                {
+                  "key": "status",
+                  "value": "COMPLETED",
+                  "description": "Filter by status"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Target page"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Limit of items"
+                }
+              ]
+            },
+            "description": "Fetches a paginated list of sessions for the mentor."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "3. Update Session Status",
+      "item": [
+        {
+          "name": "Complete Session (Success)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"COMPLETED\",\n  \"evaluationNotes\": \"Excellent work. Student demonstrated complete grasp of dependency injection and core modules.\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:1234/api/sessions/1/status?role=mentor&profileId=1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "1234",
+              "path": [
+                "api",
+                "sessions",
+                "1",
+                "status"
+              ],
+              "query": [
+                {
+                  "key": "role",
+                  "value": "mentor",
+                  "description": "Simulates mentor role"
+                },
+                {
+                  "key": "profileId",
+                  "value": "1",
+                  "description": "Simulates mentor profile ID (assigned mentor for session 1 is Sarah Connor, ID 1)"
+                }
+              ]
+            },
+            "description": "Assigned mentor (Sarah Connor, ID 1) marks session 1 as COMPLETED with evaluation notes."
+          },
+          "response": []
+        },
+        {
+          "name": "Complete Session (Forbidden - Non-Assigned Mentor)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"COMPLETED\",\n  \"evaluationNotes\": \"Excellent work. Student demonstrated complete grasp of dependency injection and core modules.\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:1234/api/sessions/1/status?role=mentor&profileId=2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "1234",
+              "path": [
+                "api",
+                "sessions",
+                "1",
+                "status"
+              ],
+              "query": [
+                {
+                  "key": "role",
+                  "value": "mentor",
+                  "description": "Simulates mentor role"
+                },
+                {
+                  "key": "profileId",
+                  "value": "2",
+                  "description": "Simulates mentor profile ID (Bruce Wayne, ID 2, who is not assigned to session 1)"
+                }
+              ]
+            },
+            "description": "Non-assigned mentor attempts to complete session 1. Should return 403 Forbidden."
+          },
+          "response": []
+        },
+        {
+          "name": "Cancel Session (Student)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"CANCELED\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:1234/api/sessions/3/status?role=student&profileId=1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "1234",
+              "path": [
+                "api",
+                "sessions",
+                "3",
+                "status"
+              ],
+              "query": [
+                {
+                  "key": "role",
+                  "value": "student"
+                },
+                {
+                  "key": "profileId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Student cancels their own booked session (Session ID 3, student ID 1)."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "4. Get Session Audit Log",
+      "item": [
+        {
+          "name": "Get Audit Log",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:1234/api/sessions/1/audit",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "1234",
+              "path": [
+                "api",
+                "sessions",
+                "1",
+                "audit"
+              ]
+            },
+            "description": "Fetches the AI classification log associated with session ID 1."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
