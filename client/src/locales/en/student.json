@@ -49,5 +49,22 @@
   "toast_cancel_error": "Failed to cancel session",
   "toast_new_session_click": "Booking flow modal is coming soon!",
   "error_loading": "Failed to load sessions",
-  "error_retry": "Retry"
+  "error_retry": "Retry",
+  "welcome_title": "Welcome back, {{name}}!",
+  "welcome_subtext": "You're making great progress this semester. You have {{count}} sessions coming up this week.",
+  "welcome_subtext_zero": "You're making great progress this semester. You have no sessions coming up this week.",
+  "welcome_subtext_one": "You're making great progress this semester. You have 1 session coming up this week.",
+  "stat_total_sessions": "Total Sessions",
+  "stat_upcoming": "Upcoming",
+  "stat_completed": "Completed",
+  "upcoming_sessions_title": "Upcoming Sessions",
+  "view_all": "View All",
+  "join_session_btn": "Join Session",
+  "reschedule_btn": "Reschedule",
+  "latest_feedback_title": "Latest Feedback",
+  "no_feedback_yet": "No feedback received yet. Complete a session to get evaluations from mentors.",
+  "monthly_progress_title": "Monthly Progress",
+  "monthly_sessions_progress": "Completed Sessions",
+  "goal_alignment": "Goal Alignment",
+  "toast_join_session": "Launching video call integration..."
 }

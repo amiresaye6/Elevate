@@ -65,7 +65,7 @@ const SessionHistoryPage: React.FC = () => {
   const [sessions, setSessions] = useState<Session[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  
+
   // Pagination
   const [page, setPage] = useState(1)
   const [limit] = useState(4) // Matches screenshot's exact row count
@@ -103,7 +103,7 @@ const SessionHistoryPage: React.FC = () => {
     setError(null)
     try {
       const statusParam = statusFilter === 'ALL' ? undefined : statusFilter
-      
+
       const response = await api.get('/sessions', {
         params: {
           role: 'student',
@@ -154,21 +154,21 @@ const SessionHistoryPage: React.FC = () => {
   // Format Date and Time
   const formatDateTime = (dateStr: string) => {
     const dateObj = new Date(dateStr)
-    
-    const dateOptions: Intl.DateTimeFormatOptions = { 
-      month: 'short', 
-      day: '2-digit', 
-      year: 'numeric' 
+
+    const dateOptions: Intl.DateTimeFormatOptions = {
+      month: 'short',
+      day: '2-digit',
+      year: 'numeric'
     }
-    const timeOptions: Intl.DateTimeFormatOptions = { 
-      hour: '2-digit', 
+    const timeOptions: Intl.DateTimeFormatOptions = {
+      hour: '2-digit',
       minute: '2-digit',
       hour12: true
     }
 
     const formattedDate = new Intl.DateTimeFormat(i18n.language, dateOptions).format(dateObj)
     const formattedTime = new Intl.DateTimeFormat(i18n.language, timeOptions).format(dateObj)
-    
+
     return {
       date: formattedDate,
       time: `${formattedTime} EST` // standardizing as EST for mock parity
@@ -264,9 +264,8 @@ const SessionHistoryPage: React.FC = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder={t('search_placeholder')}
-            className={`w-full bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-sm rounded-xl py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-500/50 text-slate-800 dark:text-slate-100 placeholder-slate-400 transition-all ${
-              isRtl ? 'pr-12 pl-4 text-right' : 'pl-12 pr-4 text-left'
-            }`}
+            className={`w-full bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-sm rounded-xl py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-500/50 text-slate-800 dark:text-slate-100 placeholder-slate-400 transition-all ${isRtl ? 'pr-12 pl-4 text-right' : 'pl-12 pr-4 text-left'
+              }`}
           />
         </div>
 
@@ -282,11 +281,10 @@ const SessionHistoryPage: React.FC = () => {
                   setStatusFilter(filter)
                   setPage(1)
                 }}
-                className={`px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-all duration-200 ${
-                  isActive
+                className={`px-4 py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-all duration-200 ${isActive
                     ? 'bg-slate-900 text-white dark:bg-indigo-600 dark:text-white shadow-md'
                     : 'bg-slate-100 hover:bg-slate-200 text-slate-600 dark:bg-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-100 border border-transparent dark:border-slate-800/40'
-                }`}
+                  }`}
               >
                 {t(labelKey)}
               </button>
@@ -318,7 +316,7 @@ const SessionHistoryPage: React.FC = () => {
                 </th>
               </tr>
             </thead>
-            
+
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800/40">
               {loading ? (
                 // Table Skeletons
@@ -392,10 +390,10 @@ const SessionHistoryPage: React.FC = () => {
                     .join('')
                     .toUpperCase()
                     .substring(0, 2)
-                  
+
                   return (
-                    <tr 
-                      key={session.id} 
+                    <tr
+                      key={session.id}
                       className="hover:bg-slate-50/50 dark:hover:bg-slate-900/10 transition-colors duration-150"
                     >
                       <td className="px-6 py-5">
@@ -414,7 +412,7 @@ const SessionHistoryPage: React.FC = () => {
                           </div>
                         </div>
                       </td>
-                      
+
                       <td className="px-6 py-5">
                         <div className={`flex flex-col ${isRtl ? 'items-end text-right' : 'items-start text-left'}`}>
                           <span className="font-semibold text-slate-800 dark:text-slate-200 text-sm">
@@ -425,15 +423,15 @@ const SessionHistoryPage: React.FC = () => {
                           </span>
                         </div>
                       </td>
-                      
+
                       <td className="px-6 py-5 font-semibold text-slate-700 dark:text-slate-300">
                         {getDurationString(session.startTime, session.endTime)}
                       </td>
-                      
+
                       <td className="px-6 py-5">
                         {renderStatusBadge(session.status)}
                       </td>
-                      
+
                       <td className="px-6 py-5 text-center">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -442,16 +440,16 @@ const SessionHistoryPage: React.FC = () => {
                             </button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align={isRtl ? 'start' : 'end'} className="bg-white dark:bg-[#0e1730] border border-slate-200 dark:border-slate-800/80 shadow-xl rounded-xl p-1 z-55">
-                            <DropdownMenuItem 
+                            <DropdownMenuItem
                               onClick={() => handleOpenDetails(session)}
                               className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer focus:outline-none"
                             >
                               <Eye className="w-4 h-4 text-slate-400" />
                               <span>{t('action_view_details')}</span>
                             </DropdownMenuItem>
-                            
+
                             {session.status === 'SCHEDULED' && (
-                              <DropdownMenuItem 
+                              <DropdownMenuItem
                                 onClick={() => handleCancelTrigger(session)}
                                 className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/20 cursor-pointer focus:outline-none"
                               >
@@ -499,11 +497,10 @@ const SessionHistoryPage: React.FC = () => {
                   <button
                     key={pageNum}
                     onClick={() => setPage(pageNum)}
-                    className={`w-9 h-9 rounded-lg text-xs font-bold transition-all ${
-                      isActive
+                    className={`w-9 h-9 rounded-lg text-xs font-bold transition-all ${isActive
                         ? 'bg-indigo-600 text-white shadow-md'
                         : 'border border-slate-200 dark:border-slate-800 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800'
-                    }`}
+                      }`}
                   >
                     {pageNum}
                   </button>
@@ -527,11 +524,11 @@ const SessionHistoryPage: React.FC = () => {
       {showDetailModal && selectedSession && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           {/* Backdrop overlay */}
-          <div 
+          <div
             className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm"
             onClick={() => setShowDetailModal(false)}
           ></div>
-          
+
           {/* Modal Container */}
           <div className="relative bg-white dark:bg-[#0e1730] border border-slate-200 dark:border-slate-800/80 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl z-10 animate-in zoom-in-95 duration-200">
             {/* Header */}
@@ -539,7 +536,7 @@ const SessionHistoryPage: React.FC = () => {
               <h3 className="font-bold text-lg text-slate-800 dark:text-white">
                 {t('modal_title')}
               </h3>
-              <button 
+              <button
                 onClick={() => setShowDetailModal(false)}
                 className="text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors"
               >
@@ -640,9 +637,8 @@ const SessionHistoryPage: React.FC = () => {
                       <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">
                         {t('modal_audit_status')}
                       </span>
-                      <span className={`text-xs font-bold ${
-                        auditDetails.status === 'SUCCESS' ? 'text-emerald-500' : 'text-rose-500'
-                      }`}>
+                      <span className={`text-xs font-bold ${auditDetails.status === 'SUCCESS' ? 'text-emerald-500' : 'text-rose-500'
+                        }`}>
                         {auditDetails.status}
                       </span>
                     </div>
@@ -671,7 +667,7 @@ const SessionHistoryPage: React.FC = () => {
       {/* Cancellation Confirmation Modal */}
       {showCancelModal && cancelTargetSession && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div 
+          <div
             className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm"
             onClick={() => setShowCancelModal(false)}
           ></div>
@@ -684,7 +680,7 @@ const SessionHistoryPage: React.FC = () => {
             <h3 className="font-bold text-lg text-slate-800 dark:text-white mb-2">
               {t('cancel_confirm_title')}
             </h3>
-            
+
             <p className="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
               {t('cancel_confirm_desc')}
             </p>
@@ -697,7 +693,7 @@ const SessionHistoryPage: React.FC = () => {
               >
                 {t('cancel_cancel_btn')}
               </button>
-              
+
               <button
                 onClick={handleCancelConfirm}
                 disabled={cancelling}

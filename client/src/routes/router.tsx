@@ -14,6 +14,7 @@ const NotFoundPage = lazy(() => import('../pages/shared/NotFoundPage'))
 const ForbiddenPage = lazy(() => import('../pages/shared/ForbiddenPage'))
 const ServerErrorPage = lazy(() => import('../pages/shared/ServerErrorPage'))
 const SessionHistoryPage = lazy(() => import('../pages/student/SessionHistoryPage'))
+const StudentDashboardPage = lazy(() => import('../pages/student/StudentDashboardPage'))
 
 // Loading indicator component for Suspense fallback
 const LoadingFallback = () => (
@@ -117,7 +118,7 @@ export const router = createBrowserRouter([
             path: 'student/dashboard',
             element: (
               <Suspense fallback={<LoadingFallback />}>
-                <NotFoundPage /> {/* Replace with <StudentDashboardPage /> when implemented */}
+                <StudentDashboardPage />
               </Suspense>
             ),
           },
