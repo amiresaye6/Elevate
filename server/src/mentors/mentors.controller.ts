@@ -1,4 +1,13 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { MentorsService } from './mentors.service';
 
 @Controller('mentors')
-export class MentorsController {}
+export class MentorsController {
+  constructor(private readonly mentorsService: MentorsService) {}
+
+  // GET /mentors/:id/dashboard
+  @Get(':id/dashboard')
+  getDashboard(@Param('id', ParseIntPipe) id: number) {
+    return this.mentorsService.getDashboard(id);
+  }
+}
