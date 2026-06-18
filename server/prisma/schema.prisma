@@ -21,10 +21,15 @@ enum SessionStatus {
 model User {
   id              Int              @id @default(autoincrement())
   email           String           @unique
-  password        String
+  password        String?
   role            Role
   isBlocked       Boolean          @default(false)
   createdAt       DateTime         @default(now())
+  resetToken      String?
+  resetTokenExp   DateTime?
+  authProvider    String           @default("local")
+  googleId        String?          @unique
+  profilePicture  String?
 
   studentProfile  StudentProfile?
   mentorProfile   MentorProfile?
@@ -106,3 +111,5 @@ model SessionAuditLog {
 
   session            ReviewSession  @relation(fields: [sessionId], references: [id])
 }
+
+
