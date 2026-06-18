@@ -9,55 +9,69 @@ import {
   Query,
   ParseIntPipe,
   Request,
+  UseGuards,
 } from '@nestjs/common';
+
 import { AvailabilityService } from './availability.service';
 import {
   CreateAvailabilityDto,
   UpdateAvailabilityDto,
 } from './dto/availability.dto';
 
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+
 interface RequestWithUser extends Request {
-  user?: {
-    mentorProfile?: {
-      id: number;
-    };
+  user: {
+    id: number;
+    email: string;
+    role: string;
   };
 }
 
 @Controller('availability')
 export class AvailabilityController {
-  constructor(private readonly availabilityService: AvailabilityService) {}
+  constructor(
+    private readonly availabilityService: AvailabilityService,
+  ) {}
 
-  // GET /api/availability?mentorId=1
   @Get()
   findAll(@Query('mentorId', ParseIntPipe) mentorId: number) {
     return this.availabilityService.findAllByMentor(mentorId);
   }
 
-  // POST /api/availability
+
   @Post()
   create(@Body() dto: CreateAvailabilityDto) {
     return this.availabilityService.create(dto);
   }
 
-  // PUT /api/availability/:id
+
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateAvailabilityDto,
     @Request() req: RequestWithUser,
   ) {
-    const requestingMentorId = req?.user?.mentorProfile?.id ?? 0;
-    return this.availabilityService.update(id, dto, requestingMentorId);
+    return this.availabilityService.update(
+      id,
+      dto,
+      req.user.id,
+    );
   }
 
-  // DELETE /api/availability/:id
+
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(
     @Param('id', ParseIntPipe) id: number,
+    
     @Request() req: RequestWithUser,
   ) {
-    const requestingMentorId = req?.user?.mentorProfile?.id ?? 0;
-    return this.availabilityService.remove(id, requestingMentorId);
+    console.log("TOKEN USER =>", req.user);
+    return this.availabilityService.remove(
+      id,
+      req.user.id,
+    );
   }
 }
