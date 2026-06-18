@@ -14,6 +14,8 @@ import AdminLayout from '../layouts/AdminLayout'
 const NotFoundPage = lazy(() => import('../pages/shared/NotFoundPage'))
 const ForbiddenPage = lazy(() => import('../pages/shared/ForbiddenPage'))
 const ServerErrorPage = lazy(() => import('../pages/shared/ServerErrorPage'))
+// const MentorDashboardPage = lazy(() => import('../pages/mentor/DashboardPage'))
+// const AvailabilityPage = lazy(() => import('../pages/mentor/AvailabilityPage'))
 
 // Auth & Profile pages
 const LoginPage = lazy(() => import('../pages/auth/LoginPage'))
@@ -193,7 +195,8 @@ export const router = createBrowserRouter([
             path: 'mentor/dashboard',
             element: (
               <Suspense fallback={<LoadingFallback />}>
-                <NotFoundPage /> {/* Replace with <MentorDashboardPage /> when implemented */}
+                <NotFoundPage /> {/* Replace with <MentorDashboardPage /> when implemented */
+                }
               </Suspense>
             ),
           },
@@ -201,7 +204,8 @@ export const router = createBrowserRouter([
             path: 'mentor/availability',
             element: (
               <Suspense fallback={<LoadingFallback />}>
-                <NotFoundPage /> {/* Replace with <AvailabilityManagementPage /> when implemented */}
+                <NotFoundPage /> {/* Replace with <AvailabilityManagementPage /> when implemented */
+                }
               </Suspense>
             ),
           },

@@ -1,13 +1,16 @@
-import { IsIn, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-
+import { IsIn, IsNotEmpty, IsOptional, IsString , IsEnum} from 'class-validator';
+import { SessionStatus } from '@prisma/client';
 export class UpdateStatusDto {
-  @IsNotEmpty()
-  @IsIn(['COMPLETED', 'CANCELED'], {
-    message: 'Status must be COMPLETED or CANCELED',
+  @IsEnum(SessionStatus,  {
+    message: 'Status must be SCHEDULED, COMPLETED or CANCELED',
   })
-  status: string;
+  status!: SessionStatus;
 
   @IsOptional()
   @IsString()
   evaluationNotes?: string;
 }
+
+
+
+  
