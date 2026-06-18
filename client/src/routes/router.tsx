@@ -2,6 +2,7 @@
 import { lazy, Suspense } from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 import MainLayout from '../layouts/MainLayout'
+import AuthLayout from '../layouts/AuthLayout'
 import { ProtectedRoute } from './ProtectedRoute'
 
 // Import structural layouts
@@ -13,6 +14,14 @@ import AdminLayout from '../layouts/AdminLayout'
 const NotFoundPage = lazy(() => import('../pages/shared/NotFoundPage'))
 const ForbiddenPage = lazy(() => import('../pages/shared/ForbiddenPage'))
 const ServerErrorPage = lazy(() => import('../pages/shared/ServerErrorPage'))
+
+// Auth & Profile pages
+const LoginPage = lazy(() => import('../pages/auth/LoginPage'))
+const RegisterPage = lazy(() => import('../pages/auth/RegisterPage'))
+const ForgotPasswordPage = lazy(() => import('../pages/auth/ForgotPasswordPage'))
+const ResetPasswordPage = lazy(() => import('../pages/auth/ResetPasswordPage'))
+const LoginSuccessPage = lazy(() => import('../pages/auth/LoginSuccessPage'))
+const ProfilePage = lazy(() => import('../pages/shared/ProfilePage'))
 
 // Loading indicator component for Suspense fallback
 const LoadingFallback = () => (
@@ -45,22 +54,6 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: 'login',
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <NotFoundPage /> {/* Replace with <LoginPage /> when implemented */}
-          </Suspense>
-        ),
-      },
-      {
-        path: 'register',
-        element: (
-          <Suspense fallback={<LoadingFallback />}>
-            <NotFoundPage /> {/* Replace with <RegisterPage /> when implemented */}
-          </Suspense>
-        ),
-      },
-      {
         path: 'mentors',
         element: (
           <Suspense fallback={<LoadingFallback />}>
@@ -72,7 +65,7 @@ export const router = createBrowserRouter([
         path: 'mentor/:id',
         element: (
           <Suspense fallback={<LoadingFallback />}>
-            <NotFoundPage /> {/* Replace with <MentorProfilePage /> when implemented */}
+            <NotFoundPage />
           </Suspense>
         ),
       },
@@ -99,6 +92,54 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<LoadingFallback />}>
             <NotFoundPage />
+          </Suspense>
+        ),
+      },
+    ],
+  },
+
+  // 2. Authentication Routes (wrapped in AuthLayout)
+  {
+    path: '/',
+    element: <AuthLayout />,
+    children: [
+      {
+        path: 'login',
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <LoginPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'register',
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <RegisterPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'forgot-password',
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <ForgotPasswordPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'reset-password',
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <ResetPasswordPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'auth/login-success',
+        element: (
+          <Suspense fallback={<LoadingFallback />}>
+            <LoginSuccessPage />
           </Suspense>
         ),
       },
@@ -132,7 +173,7 @@ export const router = createBrowserRouter([
             path: 'profile', // Accessible here so student stays inside StudentLayout
             element: (
               <Suspense fallback={<LoadingFallback />}>
-                <NotFoundPage /> {/* Replace with <ProfilePage /> when implemented */}
+                <ProfilePage />
               </Suspense>
             ),
           },
@@ -176,7 +217,7 @@ export const router = createBrowserRouter([
             path: 'profile', // Accessible here so mentor stays inside MentorLayout
             element: (
               <Suspense fallback={<LoadingFallback />}>
-                <NotFoundPage /> {/* Replace with <ProfilePage /> when implemented */}
+                <ProfilePage />
               </Suspense>
             ),
           },
@@ -228,7 +269,7 @@ export const router = createBrowserRouter([
             path: 'profile', // Accessible here so admin stays inside AdminLayout
             element: (
               <Suspense fallback={<LoadingFallback />}>
-                <NotFoundPage /> {/* Replace with <ProfilePage /> when implemented */}
+                <ProfilePage />
               </Suspense>
             ),
           },
