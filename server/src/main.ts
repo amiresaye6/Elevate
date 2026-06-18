@@ -7,14 +7,12 @@ async function bootstrap() {
   app.setGlobalPrefix('api', {
     exclude: ['auth/google', 'auth/google/callback'],
   });
-  
   app.enableCors({
     origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
   app.useGlobalPipes(
-
     new ValidationPipe({
       whitelist: true,
       transform: true,

@@ -25,6 +25,11 @@ const ResetPasswordPage = lazy(() => import('../pages/auth/ResetPasswordPage'))
 const LoginSuccessPage = lazy(() => import('../pages/auth/LoginSuccessPage'))
 const ProfilePage = lazy(() => import('../pages/shared/ProfilePage'))
 
+// student pages.
+const SessionHistoryPage = lazy(() => import('../pages/student/SessionHistoryPage'))
+const StudentDashboardPage = lazy(() => import('../pages/student/StudentDashboardPage'))
+const BookingFlowPage = lazy(() => import('../pages/student/BookingFlowPage'))
+
 // Loading indicator component for Suspense fallback
 const LoadingFallback = () => (
   <div className="flex items-center justify-center min-h-[50vh]">
@@ -159,7 +164,7 @@ export const router = createBrowserRouter([
             path: 'student/dashboard',
             element: (
               <Suspense fallback={<LoadingFallback />}>
-                <NotFoundPage /> {/* Replace with <StudentDashboardPage /> when implemented */}
+                <StudentDashboardPage />
               </Suspense>
             ),
           },
@@ -167,7 +172,15 @@ export const router = createBrowserRouter([
             path: 'student/sessions',
             element: (
               <Suspense fallback={<LoadingFallback />}>
-                <NotFoundPage /> {/* Replace with <SessionHistoryPage /> when implemented */}
+                <SessionHistoryPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'student/book/:mentorId',
+            element: (
+              <Suspense fallback={<LoadingFallback />}>
+                <BookingFlowPage />
               </Suspense>
             ),
           },

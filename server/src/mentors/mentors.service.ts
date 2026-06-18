@@ -14,7 +14,7 @@ export class MentorsService {
         sessions: {
           include: { student: { select: { name: true } } },
           orderBy: { startTime: 'desc' },
-          take: 5, 
+          take: 5,
         },
       },
     });
