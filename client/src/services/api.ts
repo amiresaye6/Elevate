@@ -28,12 +28,16 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     const status = error.response ? error.response.status : null
+    const requestUrl = error.config?.url || ''
+    const isAuthRequest = requestUrl.includes('/auth/login') || requestUrl.includes('/auth/register')
 
     if (status === 401) {
-      // Unauthorized: clear local auth tokens and redirect to login
-      localStorage.removeItem('accessToken')
-      localStorage.removeItem('role')
-      window.location.href = '/login'
+      if (!isAuthRequest) {
+        // Unauthorized: clear local auth tokens and redirect to login
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('role')
+        window.location.href = '/login'
+      }
     } else if (status === 403) {
       // Forbidden: redirect to 403 error page
       window.location.href = '/403'
