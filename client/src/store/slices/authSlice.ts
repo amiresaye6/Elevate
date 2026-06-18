@@ -5,6 +5,8 @@ interface User {
   id: string
   name: string
   email: string
+  mentorProfileId?: number
+  studentProfileId?: number
 }
 
 interface AuthState {
@@ -38,6 +40,23 @@ const authSlice = createSlice({
       localStorage.setItem('accessToken', accessToken)
       localStorage.setItem('user', JSON.stringify(user))
       localStorage.setItem('role', role)
+    },
+     setProfileId: (
+      state,
+      action: PayloadAction<{
+        mentorProfileId?: number
+        studentProfileId?: number
+      }>
+    ) => {
+      if (state.user) {
+        if (action.payload.mentorProfileId) {
+          state.user.mentorProfileId = action.payload.mentorProfileId
+        }
+        if (action.payload.studentProfileId) {
+          state.user.studentProfileId = action.payload.studentProfileId
+        }
+        localStorage.setItem('user', JSON.stringify(state.user))
+      }
     },
     clearCredentials: (state) => {
       state.accessToken = null
