@@ -23,16 +23,39 @@ export const createAvailability = async (
   return response.data
 }
 
+// export const updateAvailability = async (
+//   id: number,
+//   payload: UpdateAvailabilityPayload
+// ): Promise<MentorAvailability> => {
+//   const response = await api.put(`/availability/${id}`, payload)
+//   return response.data
+// }
+
+// export const deleteAvailability = async (id: number): Promise<void> => {
+//   await api.delete(`/availability/${id}`)
+// }
 export const updateAvailability = async (
   id: number,
   payload: UpdateAvailabilityPayload
 ): Promise<MentorAvailability> => {
-  const response = await api.put(`/availability/${id}`, payload)
+  const token = localStorage.getItem('accessToken') 
+  
+  const response = await api.put(`/availability/${id}`, payload, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
   return response.data
 }
 
 export const deleteAvailability = async (id: number): Promise<void> => {
-  await api.delete(`/availability/${id}`)
+  const token = localStorage.getItem('accessToken') 
+  
+  await api.delete(`/availability/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
 }
 
 // ─── Sessions APIs ─────────────────────────────────────────────────
