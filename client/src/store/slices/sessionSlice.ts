@@ -62,7 +62,7 @@ const sessionSlice = createSlice({
       })
       .addCase(fetchMentorSessions.fulfilled, (state, action) => {
         state.loading = false
-        state.sessions = action.payload
+        state.sessions = (action.payload || []) as ReviewSession[]
       })
       .addCase(fetchMentorSessions.rejected, (state, action) => {
         state.loading = false
@@ -74,7 +74,6 @@ const sessionSlice = createSlice({
       })
       .addCase(updateSession.fulfilled, (state, action) => {
         state.loading = false
-        // استبدلي الـ session المحدثة في الـ array
         const index = state.sessions.findIndex(
           (s) => s.id === action.payload.id
         )

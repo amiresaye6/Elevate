@@ -8,5 +8,9 @@ export class MentorsController {
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     return await this.mentorsService.findOne(id);
+  // GET /mentors/:id/dashboard
+  @Get(':id/dashboard')
+  getDashboard(@Param('id', ParseIntPipe) id: number) {
+    return this.mentorsService.getDashboard(id);
   }
 }
