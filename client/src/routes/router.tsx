@@ -30,6 +30,7 @@ const ProfilePage = lazy(() => import('../pages/shared/ProfilePage'))
 const SessionHistoryPage = lazy(() => import('../pages/student/SessionHistoryPage'))
 const StudentDashboardPage = lazy(() => import('../pages/student/StudentDashboardPage'))
 const BookingFlowPage = lazy(() => import('../pages/student/BookingFlowPage'))
+const SessionDetailsPage = lazy(() => import('../pages/student/SessionDetailsPage'))
 
 // Loading indicator component for Suspense fallback
 const LoadingFallback = () => (
@@ -174,6 +175,14 @@ export const router = createBrowserRouter([
             element: (
               <Suspense fallback={<LoadingFallback />}>
                 <SessionHistoryPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'student/sessions/:id',
+            element: (
+              <Suspense fallback={<LoadingFallback />}>
+                <SessionDetailsPage />
               </Suspense>
             ),
           },

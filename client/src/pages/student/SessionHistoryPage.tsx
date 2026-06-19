@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../../services/api'
 import { toast } from 'react-hot-toast'
@@ -11,10 +12,9 @@ import {
   Eye,
   XCircle,
   AlertCircle,
-  CheckCircle2,
-  ShieldCheck
+  CheckCircle2
 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -60,6 +60,7 @@ interface Session {
 const SessionHistoryPage: React.FC = () => {
   const { t, i18n } = useTranslation(['student'])
   const isRtl = i18n.language.startsWith('ar')
+  const navigate = useNavigate()
 
   // State
   const [sessions, setSessions] = useState<Session[]>([])
@@ -77,11 +78,7 @@ const SessionHistoryPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
 
-  // Selected Session for Details Modal
-  const [selectedSession, setSelectedSession] = useState<Session | null>(null)
-  const [auditDetails, setAuditDetails] = useState<any | null>(null)
-  const [loadingAudit, setLoadingAudit] = useState(false)
-  const [showDetailModal, setShowDetailModal] = useState(false)
+
 
   // Session for Cancellation Confirmation Modal
   const [cancelTargetSession, setCancelTargetSession] = useState<Session | null>(null)
@@ -175,24 +172,7 @@ const SessionHistoryPage: React.FC = () => {
     }
   }
 
-  // Open Details Modal & Fetch Audit
-  const handleOpenDetails = async (session: Session) => {
-    setSelectedSession(session)
-    setShowDetailModal(true)
-    setLoadingAudit(true)
-    setAuditDetails(null)
 
-    try {
-      const response = await api.get(`/sessions/${session.id}/audit`)
-      if (response.data && response.data.success) {
-        setAuditDetails(response.data.data)
-      }
-    } catch (err) {
-      console.error('Failed to load audit logs:', err)
-    } finally {
-      setLoadingAudit(false)
-    }
-  }
 
   // Trigger Cancel Session
   const handleCancelTrigger = (session: Session) => {
@@ -441,7 +421,7 @@ const SessionHistoryPage: React.FC = () => {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align={isRtl ? 'start' : 'end'} className="bg-white dark:bg-[#0e1730] border border-slate-200 dark:border-slate-800/80 shadow-xl rounded-xl p-1 z-55">
                             <DropdownMenuItem
-                              onClick={() => handleOpenDetails(session)}
+                              onClick={() => navigate(`/student/sessions/${session.id}`)}
                               className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer focus:outline-none"
                             >
                               <Eye className="w-4 h-4 text-slate-400" />
@@ -520,149 +500,7 @@ const SessionHistoryPage: React.FC = () => {
         )}
       </div>
 
-      {/* Session Details Modal */}
-      {showDetailModal && selectedSession && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop overlay */}
-          <div
-            className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm"
-            onClick={() => setShowDetailModal(false)}
-          ></div>
 
-          {/* Modal Container */}
-          <div className="relative bg-white dark:bg-[#0e1730] border border-slate-200 dark:border-slate-800/80 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl z-10 animate-in zoom-in-95 duration-200">
-            {/* Header */}
-            <div className="px-6 py-5 border-b border-slate-100 dark:border-slate-850/60 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/20">
-              <h3 className="font-bold text-lg text-slate-800 dark:text-white">
-                {t('modal_title')}
-              </h3>
-              <button
-                onClick={() => setShowDetailModal(false)}
-                className="text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors"
-              >
-                <XCircle className="w-6 h-6" />
-              </button>
-            </div>
-
-            {/* Content Body */}
-            <div className="p-6 space-y-6 max-h-[70vh] overflow-y-auto">
-              {/* Mentor profile snippet */}
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center font-bold text-sm">
-                  {selectedSession.mentor.name.substring(0, 2).toUpperCase()}
-                </div>
-                <div>
-                  <h4 className="font-bold text-slate-800 dark:text-white leading-tight">
-                    {selectedSession.mentor.name}
-                  </h4>
-                  <span className="text-xs text-indigo-500 dark:text-indigo-400 font-semibold bg-indigo-500/10 dark:bg-indigo-500/5 px-2 py-0.5 rounded mt-0.5 inline-block">
-                    {selectedSession.mentor.title}
-                  </span>
-                </div>
-              </div>
-
-              {/* Date, Time & Status */}
-              <div className="grid grid-cols-2 gap-4 border border-slate-100 dark:border-slate-800/40 rounded-xl p-4 bg-slate-50/30 dark:bg-slate-900/10">
-                <div className="space-y-1">
-                  <span className="text-xs text-slate-400 font-semibold uppercase">{t('col_date_time')}</span>
-                  <p className="font-semibold text-slate-800 dark:text-slate-200 text-sm">
-                    {formatDateTime(selectedSession.startTime).date}
-                  </p>
-                  <p className="text-xs text-slate-500 font-medium">
-                    {formatDateTime(selectedSession.startTime).time}
-                  </p>
-                </div>
-                <div className="space-y-1">
-                  <span className="text-xs text-slate-400 font-semibold uppercase">{t('col_status')}</span>
-                  <div>{renderStatusBadge(selectedSession.status)}</div>
-                </div>
-              </div>
-
-              {/* Description */}
-              <div className="space-y-2">
-                <h5 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                  {t('modal_description')}
-                </h5>
-                <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-900/30 border border-slate-100 dark:border-slate-850 p-4 rounded-xl">
-                  {selectedSession.description}
-                </p>
-              </div>
-
-              {/* Evaluation Notes (visible if Completed) */}
-              {selectedSession.status === 'COMPLETED' && (
-                <div className="space-y-2 border-t border-slate-100 dark:border-slate-800/40 pt-4">
-                  <h5 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    {t('modal_evaluation_notes')}
-                  </h5>
-                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed bg-emerald-500/5 border border-emerald-500/15 p-4 rounded-xl">
-                    {selectedSession.evaluationNotes || t('modal_no_evaluation')}
-                  </p>
-                </div>
-              )}
-
-              {/* AI Audit Block */}
-              <div className="border-t border-slate-100 dark:border-slate-800/40 pt-4 space-y-3">
-                <div className="flex items-center gap-1.5">
-                  <ShieldCheck className="w-4.5 h-4.5 text-indigo-500" />
-                  <h5 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    {t('modal_ai_audit')}
-                  </h5>
-                </div>
-
-                {loadingAudit ? (
-                  <div className="flex items-center justify-center p-4">
-                    <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-indigo-500"></div>
-                  </div>
-                ) : auditDetails ? (
-                  <div className="grid grid-cols-3 gap-3">
-                    <div className="bg-slate-50 dark:bg-slate-900/30 border border-slate-100 dark:border-slate-850 p-3 rounded-xl text-center">
-                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">
-                        {t('modal_predicted_tag')}
-                      </span>
-                      <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">
-                        {auditDetails.predictedTag}
-                      </span>
-                    </div>
-
-                    <div className="bg-slate-50 dark:bg-slate-900/30 border border-slate-100 dark:border-slate-850 p-3 rounded-xl text-center">
-                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">
-                        {t('modal_confidence')}
-                      </span>
-                      <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
-                        {Math.round(auditDetails.confidenceScore * 100)}%
-                      </span>
-                    </div>
-
-                    <div className="bg-slate-50 dark:bg-slate-900/30 border border-slate-100 dark:border-slate-850 p-3 rounded-xl text-center">
-                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">
-                        {t('modal_audit_status')}
-                      </span>
-                      <span className={`text-xs font-bold ${auditDetails.status === 'SUCCESS' ? 'text-emerald-500' : 'text-rose-500'
-                        }`}>
-                        {auditDetails.status}
-                      </span>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-xs text-slate-400 italic text-center p-3">
-                    Audit logs unavailable
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="px-6 py-4 border-t border-slate-100 dark:border-slate-850/60 bg-slate-50/50 dark:bg-slate-900/20 flex justify-end">
-              <Button
-                onClick={() => setShowDetailModal(false)}
-                className="bg-slate-950 text-white font-semibold rounded-xl px-5 hover:bg-slate-800 text-xs py-2"
-              >
-                {t('modal_close')}
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Cancellation Confirmation Modal */}
       {showCancelModal && cancelTargetSession && (
