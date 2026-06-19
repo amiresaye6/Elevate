@@ -9,11 +9,16 @@ import {
   ParseIntPipe,
   BadRequestException,
   NotFoundException,
+  UseGuards,
+  ForbiddenException,
 } from '@nestjs/common';
 import { SessionsService } from './sessions.service';
 import { BookSessionDto } from './dto/book-session.dto';
 import { UpdateStatusDto } from './dto/update-status.dto';
 import { PrismaService } from '../prisma/prisma.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { CurrentUser } from '../auth/current-user.decorator';
+import { Role } from '@prisma/client';
 
 @Controller('sessions')
 export class SessionsController {
@@ -22,43 +27,59 @@ export class SessionsController {
     private readonly prisma: PrismaService,
   ) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post('book')
-  async bookSession(@Body() dto: BookSessionDto) {
-    // TODO: Extract studentId from authenticated user (req.user) once AuthModule is integrated.
+  async bookSession(
+    @CurrentUser() user: { id: number; email: string; role: Role },
+    @Body() dto: BookSessionDto
+  ) {
+    if (user.role !== Role.STUDENT) {
+      throw new ForbiddenException('Only students can book sessions.');
+    }
+    
+    // Resolve student profile from user id
+    const student = await this.prisma.studentProfile.findUnique({
+      where: { userId: user.id },
+    });
+    if (!student) {
+      throw new NotFoundException('Student profile not found.');
+    }
+    
+    dto.studentId = student.id;
     return await this.sessionsService.bookSession(dto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   async getMySessions(
-    @Query('role') role?: string,
-    @Query('profileId') profileId?: string,
+    @CurrentUser() user: { id: number; email: string; role: Role },
     @Query('status') status?: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
   ) {
-    // TODO: Extract role and profileId from authenticated user (req.user) once AuthModule is integrated.
-    // For testing without auth, fallback to default student if not provided.
-    const resolvedRole = role || 'student';
-    let resolvedProfileId = profileId ? Number(profileId) : null;
+    let resolvedProfileId: number;
+    let resolvedRole: string;
 
-    if (!resolvedProfileId) {
-      if (resolvedRole.toLowerCase() === 'student') {
-        const student = await this.prisma.studentProfile.findFirst();
-        if (!student) {
-          throw new NotFoundException(
-            'No students found in the database. Please seed first.',
-          );
-        }
-        resolvedProfileId = student.id;
-      } else {
-        const mentor = await this.prisma.mentorProfile.findFirst();
-        if (!mentor) {
-          throw new NotFoundException(
-            'No mentors found in the database. Please seed first.',
-          );
-        }
-        resolvedProfileId = mentor.id;
+    if (user.role === Role.STUDENT) {
+      resolvedRole = 'student';
+      const student = await this.prisma.studentProfile.findUnique({
+        where: { userId: user.id },
+      });
+      if (!student) {
+        throw new NotFoundException('Student profile not found.');
       }
+      resolvedProfileId = student.id;
+    } else if (user.role === Role.MENTOR) {
+      resolvedRole = 'mentor';
+      const mentor = await this.prisma.mentorProfile.findUnique({
+        where: { userId: user.id },
+      });
+      if (!mentor) {
+        throw new NotFoundException('Mentor profile not found.');
+      }
+      resolvedProfileId = mentor.id;
+    } else {
+      throw new ForbiddenException('Administrators cannot view session history.');
     }
 
     return await this.sessionsService.getMySessions(
@@ -70,38 +91,65 @@ export class SessionsController {
     );
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
-  async getSessionById(@Param('id', ParseIntPipe) id: number) {
-    return await this.sessionsService.getSessionById(id);
+  async getSessionById(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser() user: { id: number; email: string; role: Role },
+  ) {
+    const sessionRes = await this.sessionsService.getSessionById(id);
+    const session = sessionRes.data;
+    
+    // Access check: Only the booking student, assigned mentor, or admin can view details
+    if (user.role === Role.STUDENT) {
+      const student = await this.prisma.studentProfile.findUnique({
+        where: { userId: user.id },
+      });
+      if (!student || session.studentId !== student.id) {
+        throw new ForbiddenException('You are not authorized to view this session.');
+      }
+    } else if (user.role === Role.MENTOR) {
+      const mentor = await this.prisma.mentorProfile.findUnique({
+        where: { userId: user.id },
+      });
+      if (!mentor || session.mentorId !== mentor.id) {
+        throw new ForbiddenException('You are not authorized to view this session.');
+      }
+    }
+
+    return sessionRes;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id/status')
   async updateSessionStatus(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateStatusDto,
-    @Query('role') role?: string,
-    @Query('profileId') profileId?: string,
+    @CurrentUser() user: { id: number; email: string; role: Role },
   ) {
-    // TODO: Extract role and profileId from authenticated user (req.user) once AuthModule is integrated.
-    // For testing without auth, fallback to default mentor or student based on update status
-    let resolvedRole = role;
-    let resolvedProfileId = profileId ? Number(profileId) : null;
+    let resolvedProfileId: number;
+    let resolvedRole: string;
 
-    if (!resolvedRole) {
-      resolvedRole = dto.status === 'COMPLETED' ? 'mentor' : 'student';
-    }
-
-    if (!resolvedProfileId) {
-      const session = await this.prisma.reviewSession.findUnique({
-        where: { id },
+    if (user.role === Role.STUDENT) {
+      resolvedRole = 'student';
+      const student = await this.prisma.studentProfile.findUnique({
+        where: { userId: user.id },
       });
-      if (!session) {
-        throw new NotFoundException(`Session with ID ${id} not found.`);
+      if (!student) {
+        throw new NotFoundException('Student profile not found.');
       }
-      resolvedProfileId =
-        resolvedRole.toLowerCase() === 'mentor'
-          ? session.mentorId
-          : session.studentId;
+      resolvedProfileId = student.id;
+    } else if (user.role === Role.MENTOR) {
+      resolvedRole = 'mentor';
+      const mentor = await this.prisma.mentorProfile.findUnique({
+        where: { userId: user.id },
+      });
+      if (!mentor) {
+        throw new NotFoundException('Mentor profile not found.');
+      }
+      resolvedProfileId = mentor.id;
+    } else {
+      throw new ForbiddenException('Administrators cannot modify session status.');
     }
 
     const updatedSession = await this.sessionsService.updateSessionStatus(
@@ -118,8 +166,36 @@ export class SessionsController {
     };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id/audit')
-  async getSessionAudit(@Param('id', ParseIntPipe) id: number) {
+  async getSessionAudit(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser() user: { id: number; email: string; role: Role },
+  ) {
+    const session = await this.prisma.reviewSession.findUnique({
+      where: { id },
+    });
+    if (!session) {
+      throw new NotFoundException(`Session with ID ${id} not found.`);
+    }
+
+    // Access check: Only the booking student, assigned mentor, or admin can view audit tags
+    if (user.role === Role.STUDENT) {
+      const student = await this.prisma.studentProfile.findUnique({
+        where: { userId: user.id },
+      });
+      if (!student || session.studentId !== student.id) {
+        throw new ForbiddenException('You are not authorized to view this session audit.');
+      }
+    } else if (user.role === Role.MENTOR) {
+      const mentor = await this.prisma.mentorProfile.findUnique({
+        where: { userId: user.id },
+      });
+      if (!mentor || session.mentorId !== mentor.id) {
+        throw new ForbiddenException('You are not authorized to view this session audit.');
+      }
+    }
+
     return await this.sessionsService.getSessionAudit(id);
   }
 }
