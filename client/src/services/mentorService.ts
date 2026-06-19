@@ -26,19 +26,19 @@ export const getAvailability = async (mentorId: number): Promise<MentorAvailabil
   const response = await api.get('/availability', {
     params: { mentorId }
   })
-  return response.data.data
+  return response.data
 }
 
 export const getMentorDashboard = async (mentorId: number): Promise<MentorDashboardData> => {
   const response = await api.get(`/mentors/${mentorId}/dashboard`)
-  return response.data.data
+  return response.data
 }
 
 export const createAvailability = async (
   payload: CreateAvailabilityPayload
 ): Promise<MentorAvailability> => {
   const response = await api.post('/availability', payload)
-  return response.data.data
+  return response.data
 }
 
 export const updateAvailability = async (
@@ -46,7 +46,7 @@ export const updateAvailability = async (
   payload: Partial<CreateAvailabilityPayload>
 ): Promise<MentorAvailability> => {
   const response = await api.put(`/availability/${id}`, payload)
-  return response.data.data
+  return response.data
 }
 
 export const deleteAvailability = async (id: number): Promise<void> => {
