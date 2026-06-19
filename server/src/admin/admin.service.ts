@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from './../prisma/prisma.service'
 
 @Injectable()
@@ -15,18 +15,27 @@ export class AdminService {
         ])
         
         const totalPages = Math.ceil(totalItems/10);
+        if(page && page>totalPages && totalPages>0){
+            throw new NotFoundException(`page not found. max page number = ${totalPages}`)
+        }
         const pagination = {page,limit:10,totalItems,totalPages};
+        
         return {users,pagination}
         
     }
 
     async updateUserStatus(newStatus:boolean,userId:number){
-        const updatedUser = await this.prismaService.user.update({
-            where:{id:userId},
-            data:{isBlocked:newStatus},
-        });
-         return updatedUser;
-         
+        try {
+            const updatedUser = await this.prismaService.user.update({
+                where:{id:userId},
+                data:{isBlocked:newStatus},
+            });
+            return updatedUser;
+        } catch (error:any) {
+            if(error.code =='P2025'){
+                throw new NotFoundException(`user with id=${userId} not found`);
+            }
+        }     
     } 
 
     async getAllSessions(page:number){
@@ -39,7 +48,11 @@ export class AdminService {
         ])
         
         const totalPages = Math.ceil(totalItems/10);
+        if(page && page>totalPages && totalPages>0){
+            throw new NotFoundException(`page not found. max page number = ${totalPages}`)
+        }
         const pagination = {page,limit:10,totalItems,totalPages};
+
         return {sessions,pagination}
     }
 
