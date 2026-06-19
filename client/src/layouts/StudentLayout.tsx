@@ -28,6 +28,7 @@ const StudentLayout: React.FC = () => {
   const navigate = useNavigate()
   const { theme, toggleTheme } = useTheme()
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
+  const [showLogoutModal, setShowLogoutModal] = useState(false)
 
   const toggleLanguage = () => {
     const nextLang = i18n.language.startsWith('en') ? 'ar' : 'en'
@@ -134,7 +135,7 @@ const StudentLayout: React.FC = () => {
           </Link>
 
           <button
-            onClick={handleLogout}
+            onClick={() => setShowLogoutModal(true)}
             className="flex items-center gap-3 w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-950/20 transition-all"
           >
             <LogOut className="w-5 h-5 text-rose-400" />
@@ -255,6 +256,48 @@ const StudentLayout: React.FC = () => {
           <Outlet />
         </main>
       </div>
+
+      {showLogoutModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div 
+            className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm"
+            onClick={() => setShowLogoutModal(false)}
+          ></div>
+          
+          <div className="relative bg-white dark:bg-[#0e1730] border border-slate-200 dark:border-slate-850/80 rounded-2xl max-w-md w-full overflow-hidden shadow-2xl z-10 p-6 animate-in zoom-in-95 duration-200 text-center">
+            <div className="w-12 h-12 bg-rose-500/10 text-rose-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <LogOut className="w-6 h-6" />
+            </div>
+
+            <h3 className="font-bold text-lg text-slate-800 dark:text-white mb-2">
+              {t('logout_confirm_title')}
+            </h3>
+
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
+              {t('logout_confirm_desc')}
+            </p>
+
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setShowLogoutModal(false)}
+                className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 dark:bg-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-100 font-bold rounded-xl py-3 text-xs transition-colors border border-transparent dark:border-slate-800/40"
+              >
+                {t('logout_cancel_btn')}
+              </button>
+
+              <button
+                onClick={() => {
+                  setShowLogoutModal(false)
+                  handleLogout()
+                }}
+                className="flex-1 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-xl py-3 text-xs shadow-lg shadow-rose-600/10 transition-colors"
+              >
+                {t('logout_confirm_btn')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

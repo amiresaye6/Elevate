@@ -104,5 +104,9 @@
   "timeline_feedback": "تم تقديم التقييم",
   "shared_resources_title": "المصادر المشتركة",
   "toast_recording_click": "جاري جلب تسجيل الفيديو المؤرشف...",
-  "toast_book_again_click": "جاري إعادة التوجيه لحجز جلسة أخرى..."
+  "toast_book_again_click": "جاري إعادة التوجيه لحجز جلسة أخرى...",
+  "logout_confirm_title": "تسجيل الخروج",
+  "logout_confirm_desc": "هل أنت متأكد من أنك تريد تسجيل الخروج من حسابك؟",
+  "logout_confirm_btn": "نعم، تسجيل الخروج",
+  "logout_cancel_btn": "إلغاء"
 }
