@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import api from '../../services/api'
 import authService from '../../services/authService'
-import { Mail, Lock, Eye, EyeOff, User, UserPlus, FileText, DollarSign, Briefcase } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, User, UserPlus, DollarSign, Briefcase } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { RegisterSchema } from '../../types/auth'
 
@@ -53,7 +53,7 @@ const RegisterPage: React.FC = () => {
 
     const result = RegisterSchema.safeParse(payloadData)
     if (!result.success) {
-      const errorMsg = result.error.errors[0]?.message || 'Invalid registration details.'
+      const errorMsg = result.error.issues[0]?.message || 'Invalid registration details.'
       toast.error(errorMsg)
       return
     }

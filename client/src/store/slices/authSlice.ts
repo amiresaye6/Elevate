@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 interface User {
-  id: string
+  id: string | number
   name: string
   email: string
   mentorProfileId?: number
