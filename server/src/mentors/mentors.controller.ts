@@ -7,6 +7,6 @@ export class MentorsController {
 
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    return await this.mentorsService.findOne(id);
+    //return await this.mentorsService.findOne(id);
   }
 }
