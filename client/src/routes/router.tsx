@@ -32,6 +32,12 @@ const StudentDashboardPage = lazy(() => import('../pages/student/StudentDashboar
 const BookingFlowPage = lazy(() => import('../pages/student/BookingFlowPage'))
 const SessionDetailsPage = lazy(() => import('../pages/student/SessionDetailsPage'))
 
+
+// Discover Section Pages 
+const LandingPage = lazy(() => import('../pages/discover/Home'))
+const MentorDiscoveryPage = lazy(() => import('../pages/discover/Mentors'))
+const MentorProfilePage = lazy(() => import('../pages/discover/MentorProfile'))
+
 // Loading indicator component for Suspense fallback
 const LoadingFallback = () => (
   <div className="flex items-center justify-center min-h-[50vh]">
@@ -58,7 +64,7 @@ export const router = createBrowserRouter([
         index: true,
         element: (
           <Suspense fallback={<LoadingFallback />}>
-            <NotFoundPage /> {/* Replace with <LandingPage /> when implemented */}
+            <LandingPage /> 
           </Suspense>
         ),
       },
@@ -66,7 +72,7 @@ export const router = createBrowserRouter([
         path: 'mentors',
         element: (
           <Suspense fallback={<LoadingFallback />}>
-            <NotFoundPage /> {/* Replace with <MentorDiscoveryPage /> when implemented */}
+            <MentorDiscoveryPage /> 
           </Suspense>
         ),
       },
@@ -74,7 +80,7 @@ export const router = createBrowserRouter([
         path: 'mentor/:id',
         element: (
           <Suspense fallback={<LoadingFallback />}>
-            <NotFoundPage />
+            <MentorProfilePage />
           </Suspense>
         ),
       },
