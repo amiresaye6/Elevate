@@ -1,7 +1,7 @@
 {
   "portal_header": "بوابة المشرف",
   "overview": "نظرة عامة",
-  "users_control": "إدارة المستخدمين",
-  "stack_settings": "إعدادات التقنيات",
-  "session_logs": "سجلات الجلسات"
+  "users control": "إدارة المستخدمين",
+  "stack settings": "إعدادات التقنيات",
+  "session logs": "سجلات الجلسات"
 }

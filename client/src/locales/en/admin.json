@@ -1,7 +1,7 @@
 {
   "portal_header": "Admin Portal",
   "overview": "Overview",
-  "users_control": "Users Control",
-  "stack_settings": "Stack Settings",
-  "session_logs": "Session Logs"
+  "users control": "Users Control",
+  "stack settings": "Stack Settings",
+  "session logs": "Session Logs"
 }
