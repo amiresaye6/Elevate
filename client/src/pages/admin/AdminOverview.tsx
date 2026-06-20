@@ -61,8 +61,8 @@ const AdminOverview: React.FC = () => {
 
     useEffect(() => {
         FetchDashboardData();
-        dispatch(fetchAdminUsers());
-        dispatch(fetchAdminSessions());
+        dispatch(fetchAdminUsers(1));
+        dispatch(fetchAdminSessions(1));
     }, [dispatch]);
 
     const isPageLoading = dashboardLoading || storeLoading;
@@ -98,7 +98,7 @@ const AdminOverview: React.FC = () => {
                     <h3 className="font-bold text-slate-800 dark:text-slate-100">{t('error_loading')}</h3>
                     <p className="text-xs text-slate-400">{pageError}</p>
                     <button
-                        onClick={() => { FetchDashboardData(); dispatch(fetchAdminUsers()); dispatch(fetchAdminSessions()); }}
+                        onClick={() => { FetchDashboardData(); dispatch(fetchAdminUsers(1)); dispatch(fetchAdminSessions(1)); }}
                         className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-indigo-500 transition-colors text-xs"
                     >
                         {t('error_retry')}

@@ -35,9 +35,9 @@ const initialState: AdminState = {
 
 export const fetchAdminUsers = createAsyncThunk(
   'admin/fetchUsers',
-  async (_, { rejectWithValue }) => {
+  async (page:number, { rejectWithValue }) => {
     try {
-      const response = await api.get<any>('admin/users?page=1');
+      const response = await api.get<any>(`/users?page=${page}`);
       if (response && response.data && response.data.success) {
         return response.data.data.users;
       }
@@ -50,9 +50,9 @@ export const fetchAdminUsers = createAsyncThunk(
 
 export const fetchAdminSessions = createAsyncThunk(
   'admin/fetchSessions',
-  async (_, { rejectWithValue }) => {
+  async (page:number, { rejectWithValue }) => {
     try {
-      const response = await api.get<any>('admin/sessions?page=1');
+      const response = await api.get<any>(`admin/sessions?page=${page}`);
       if (response && response.data && response.data.success) {
         return response.data.data.sessions;
       }
