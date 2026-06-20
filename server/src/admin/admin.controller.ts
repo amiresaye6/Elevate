@@ -44,7 +44,7 @@ export class AdminController {
     @UseGuards(JwtAuthGuard,RolesGuard)
     @Roles('ADMIN')
     @Get('sessions')
-    async getAllSeesions(@Query('page',ParseIntPipe) page:number){
+    async getAllSessions(@Query('page',ParseIntPipe) page:number){
         const data =await this.adminService.getAllSessions(page);
         return {
             success:'true', 

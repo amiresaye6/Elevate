@@ -40,7 +40,7 @@ export class AdminService {
 
     async getAllSessions(page:number){
         const [sessions,totalItems] = await Promise.all([
-            this.prismaService.sessionAuditLog.findMany({
+            this.prismaService.reviewSession.findMany({
                 skip:(page-1)*10,
                 take:10,
             }),
@@ -76,7 +76,7 @@ export class AdminService {
     }
 
     async getSessionsCount(){
-        const sessionsCount = await this.prismaService.sessionAuditLog.count();
+        const sessionsCount = await this.prismaService.reviewSession.count();
         return sessionsCount;
     }
 

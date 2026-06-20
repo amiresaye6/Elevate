@@ -32,6 +32,9 @@ const StudentDashboardPage = lazy(() => import('../pages/student/StudentDashboar
 const BookingFlowPage = lazy(() => import('../pages/student/BookingFlowPage'))
 const SessionDetailsPage = lazy(() => import('../pages/student/SessionDetailsPage'))
 
+// admin pages
+const AdminOverView = lazy(() => import('../pages/admin/AdminOverview'))
+
 // Loading indicator component for Suspense fallback
 const LoadingFallback = () => (
   <div className="flex items-center justify-center min-h-[50vh]">
@@ -264,7 +267,7 @@ export const router = createBrowserRouter([
             path: 'admin',
             element: (
               <Suspense fallback={<LoadingFallback />}>
-                <NotFoundPage /> {/* Replace with <AdminDashboardPage /> when implemented */}
+                <AdminOverView /> {/* Replace with <AdminDashboardPage /> when implemented */}
               </Suspense>
             ),
           },
