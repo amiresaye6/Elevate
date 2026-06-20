@@ -100,5 +100,7 @@
     "go_back_home": "العودة للرئيسية",
     "go_home": "الرئيسية",
     "retry": "إعادة المحاولة"
-  }
+  },
+  "filter_scheduled": "المجدولة",
+  "filter_canceled": "الملغاة"
 }

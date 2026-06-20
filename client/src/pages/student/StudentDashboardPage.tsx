@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../../services/api'
-import { toast } from 'react-hot-toast'
 import {
   Calendar,
   Clock,
@@ -131,7 +130,7 @@ const StudentDashboardPage: React.FC = () => {
   }
 
   const handleJoinSession = () => {
-    toast.success(t('toast_join_session'))
+    window.open('https://meet.google.com/wnj-hvbo-ear', '_blank')
   }
 
   // Render subtext based on upcoming counts

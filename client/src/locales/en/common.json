@@ -100,5 +100,7 @@
     "go_back_home": "Go Back Home",
     "go_home": "Go Home",
     "retry": "Retry Connection"
-  }
+  },
+  "filter_scheduled": "Scheduled",
+  "filter_canceled": "Canceled"
 }

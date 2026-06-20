@@ -234,6 +234,16 @@ const SessionDetailsPage: React.FC = () => {
 
         {/* Header Action Buttons */}
         <div className={`flex items-center gap-3 w-full lg:w-auto ${isRtl ? 'flex-row-reverse' : ''}`}>
+          {session.status === 'SCHEDULED' && (
+            <button
+              onClick={() => window.open('https://meet.google.com/wnj-hvbo-ear', '_blank')}
+              className="flex-1 lg:flex-initial bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl px-6 py-3 text-xs md:text-sm shadow-lg shadow-indigo-600/15 transition-all flex items-center justify-center gap-1.5"
+            >
+              <Video className="w-4 h-4" />
+              <span>{t('join_session_btn')}</span>
+            </button>
+          )}
+
           {session.status === 'COMPLETED' && (
             <button
               onClick={handleViewRecording}
@@ -246,9 +256,13 @@ const SessionDetailsPage: React.FC = () => {
 
           <button
             onClick={handleBookAgain}
-            className="flex-1 lg:flex-initial bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl px-6 py-3 text-xs md:text-sm shadow-lg shadow-indigo-600/15 transition-all flex items-center justify-center gap-1.5"
+            className={`flex-1 lg:flex-initial font-bold rounded-xl px-6 py-3 text-xs md:text-sm transition-all flex items-center justify-center gap-1.5 ${
+              session.status === 'SCHEDULED'
+                ? 'border border-slate-200 dark:border-slate-850 hover:bg-slate-50 dark:hover:bg-slate-900/60 text-slate-700 dark:text-slate-200'
+                : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/15'
+            }`}
           >
-            <Calendar className="w-4 h-4" />
+            <Calendar className={`w-4 h-4 ${session.status === 'SCHEDULED' ? 'text-slate-500' : ''}`} />
             <span>{t('book_again')}</span>
           </button>
         </div>
