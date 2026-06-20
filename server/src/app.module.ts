@@ -13,6 +13,7 @@ import { AdminModule } from './admin/admin.module';
 import { AuditModule } from './audit/audit.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { EmailModule } from './email/email.module';
+import { MentorDiscoveryModule } from './mentor-discovery/mentor-discovery.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { EmailModule } from './email/email.module';
     AdminModule,
     AuditModule,
     EmailModule,
+    MentorDiscoveryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
