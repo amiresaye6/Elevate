@@ -14,13 +14,23 @@ import {
   XCircle,
   Clock,
   Download,
-  AlertCircle
+  AlertCircle,
+  Cpu,
+  CheckCircle2
 } from 'lucide-react'
 
 interface Stack {
   id: number
   name: string
   description: string
+}
+
+interface AuditLog {
+  id: number
+  predictedTag: string
+  confidenceScore: number
+  status: string
+  latencyMs: number
 }
 
 interface Mentor {
@@ -42,6 +52,7 @@ interface Session {
   status: 'SCHEDULED' | 'COMPLETED' | 'CANCELED'
   evaluationNotes: string | null
   mentor: Mentor
+  auditLog: AuditLog | null
 }
 
 const SessionDetailsPage: React.FC = () => {
@@ -315,6 +326,70 @@ const SessionDetailsPage: React.FC = () => {
             </div>
           )}
 
+          {/* Card 3: AI Audit Classification */}
+          {session.auditLog && (
+            <div className={`bg-white dark:bg-[#0d162e] border border-slate-200 dark:border-slate-800/60 rounded-3xl p-6 md:p-8 shadow-sm space-y-5 ${
+              isRtl ? 'text-right' : 'text-left'
+            }`}>
+              <h3 className={`text-lg font-extrabold text-slate-900 dark:text-white flex items-center gap-2.5 ${isRtl ? 'flex-row-reverse' : ''}`}>
+                <Cpu className="w-5.5 h-5.5 text-indigo-500" />
+                {t('modal_ai_audit') || 'AI Audit Classification'}
+              </h3>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+                {/* Predicted Tag */}
+                <div className="bg-slate-50 dark:bg-slate-900/30 border border-slate-100 dark:border-slate-850 p-5 rounded-2xl flex flex-col justify-between">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 block">
+                    {t('modal_predicted_tag') || 'Predicted Tag'}
+                  </span>
+                  <span className="inline-flex items-center justify-center px-3 py-1.5 rounded-xl text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-200/30 dark:border-indigo-800/30 w-fit">
+                    {session.auditLog.predictedTag}
+                  </span>
+                </div>
+
+                {/* Confidence Score */}
+                <div className="bg-slate-50 dark:bg-slate-900/30 border border-slate-100 dark:border-slate-850 p-5 rounded-2xl flex flex-col justify-between">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 block">
+                    {t('modal_confidence') || 'Confidence Score'}
+                  </span>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-xs font-bold">
+                      <span className="text-slate-700 dark:text-slate-350">
+                        {Math.round(session.auditLog.confidenceScore * 100)}%
+                      </span>
+                    </div>
+                    <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2">
+                      <div
+                        className="bg-indigo-600 h-2 rounded-full transition-all duration-500"
+                        style={{ width: `${session.auditLog.confidenceScore * 100}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Audit Status */}
+                <div className="bg-slate-50 dark:bg-slate-900/30 border border-slate-100 dark:border-slate-850 p-5 rounded-2xl flex flex-col justify-between">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 block">
+                    {t('modal_audit_status') || 'Audit Status'}
+                  </span>
+                  <div>
+                    {session.auditLog.status === 'SUCCESS' ? (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border border-emerald-500/20 bg-emerald-500/5 text-emerald-600 dark:text-emerald-400">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        Approved
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border border-rose-500/20 bg-rose-500/5 text-rose-600 dark:text-rose-400">
+                        <AlertCircle className="w-3.5 h-3.5" />
+                        Flagged
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
 
         {/* RIGHT COLUMN (1/3 width) */}
@@ -359,7 +434,7 @@ const SessionDetailsPage: React.FC = () => {
               </button>
 
               <button
-                onClick={() => toast.success(`Viewing ${session.mentor.name}'s profile...`)}
+                onClick={() => navigate(`/mentor/${session.mentorId}`)}
                 className="w-full py-2.5 border border-slate-200 dark:border-slate-850 hover:bg-slate-50 dark:hover:bg-slate-900/60 text-slate-700 dark:text-slate-350 font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-1.5"
               >
                 <User className="w-3.5 h-3.5 text-slate-400" />

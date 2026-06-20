@@ -11,7 +11,8 @@ import {
   Star,
   ArrowRight,
   TrendingUp,
-  BarChart3
+  BarChart3,
+  Eye
 } from 'lucide-react'
 
 interface Stack {
@@ -45,7 +46,7 @@ interface Session {
 }
 
 const StudentDashboardPage: React.FC = () => {
-  const { t, i18n } = useTranslation(['student'])
+  const { t, i18n } = useTranslation(['student', 'common'])
   const isRtl = i18n.language.startsWith('ar')
 
   // States
@@ -253,6 +254,14 @@ const StudentDashboardPage: React.FC = () => {
                     <h4 className="font-bold text-slate-800 dark:text-slate-200">{t('no_sessions_title')}</h4>
                     <p className="text-xs text-slate-400">{t('no_sessions_desc')}</p>
                   </div>
+                  <div className="pt-2">
+                    <Link
+                      to="/mentors"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold shadow-md transition-colors"
+                    >
+                      {t('new_session')}
+                    </Link>
+                  </div>
                 </div>
               ) : (
                 // Upcoming List grid
@@ -306,22 +315,40 @@ const StudentDashboardPage: React.FC = () => {
                         </div>
 
                         {/* Action triggers */}
-                        <div className="pt-3">
+                        <div className="pt-3 flex gap-2">
                           {index === 0 ? (
-                            <button
-                              onClick={handleJoinSession}
-                              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl py-2.5 text-xs shadow-md shadow-indigo-600/10 transition-colors flex items-center justify-center gap-1.5"
-                            >
-                              <Video className="w-4 h-4" />
-                              <span>{t('join_session_btn')}</span>
-                            </button>
+                            <>
+                              <button
+                                onClick={handleJoinSession}
+                                className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl py-2.5 text-xs shadow-md shadow-indigo-600/10 transition-colors flex items-center justify-center gap-1.5"
+                              >
+                                <Video className="w-4 h-4" />
+                                <span>{t('join_session_btn')}</span>
+                              </button>
+                              <Link
+                                to={`/student/sessions/${session.id}`}
+                                className="px-3 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900/60 text-slate-700 dark:text-slate-300 font-semibold rounded-xl transition-colors flex items-center justify-center"
+                                title={t('action_view_details')}
+                              >
+                                <Eye className="w-4.5 h-4.5" />
+                              </Link>
+                            </>
                           ) : (
-                            <Link
-                              to="/student/sessions"
-                              className="w-full border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900/60 text-slate-700 dark:text-slate-300 font-semibold rounded-xl py-2.5 text-xs transition-colors flex items-center justify-center"
-                            >
-                              <span>{t('reschedule_btn')}</span>
-                            </Link>
+                            <>
+                              <Link
+                                to="/student/sessions"
+                                className="flex-1 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900/60 text-slate-700 dark:text-slate-300 font-semibold rounded-xl py-2.5 text-xs transition-colors flex items-center justify-center"
+                              >
+                                <span>{t('reschedule_btn')}</span>
+                              </Link>
+                              <Link
+                                to={`/student/sessions/${session.id}`}
+                                className="px-3 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900/60 text-slate-700 dark:text-slate-300 font-semibold rounded-xl transition-colors flex items-center justify-center"
+                                title={t('action_view_details')}
+                              >
+                                <Eye className="w-4.5 h-4.5" />
+                              </Link>
+                            </>
                           )}
                         </div>
                       </div>
@@ -341,13 +368,16 @@ const StudentDashboardPage: React.FC = () => {
                   {t('latest_feedback_title')}
                 </h3>
 
-                {latestFeedbackSession ? (
+                 {latestFeedbackSession ? (
                   <div className="space-y-3.5 pt-2">
                     {/* Mentor profile */}
                     <div className={`flex items-center justify-between ${isRtl ? 'flex-row-reverse' : ''}`}>
-                      <span className="font-bold text-sm text-slate-800 dark:text-slate-200">
+                      <Link
+                        to={`/mentor/${latestFeedbackSession.mentorId}`}
+                        className="font-bold text-sm text-slate-800 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                      >
                         {latestFeedbackSession.mentor.name}
-                      </span>
+                      </Link>
                       
                       {/* Ratings */}
                       <div className="flex gap-0.5 text-amber-400">
@@ -362,14 +392,28 @@ const StudentDashboardPage: React.FC = () => {
                       &ldquo;{latestFeedbackSession.evaluationNotes}&rdquo;
                     </p>
 
-                    {/* Metadata */}
-                    <div className="text-[10px] text-slate-400 font-medium pt-1">
-                      Completed &bull; {latestFeedbackSession.mentor.title}
+                    {/* Metadata & Actions */}
+                    <div className="flex justify-between items-center pt-1">
+                      <span className="text-[10px] text-slate-400 font-medium">
+                        Completed &bull; {latestFeedbackSession.mentor.title}
+                      </span>
+                      <Link
+                        to={`/student/book/${latestFeedbackSession.mentorId}`}
+                        className="text-[11px] text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300 font-bold hover:underline"
+                      >
+                        {t('book_again')} &rarr;
+                      </Link>
                     </div>
                   </div>
                 ) : (
-                  <div className="text-xs text-slate-400 italic text-center py-6">
-                    {t('no_feedback_yet')}
+                  <div className="text-xs text-slate-400 italic text-center py-6 space-y-3">
+                    <p>{t('no_feedback_yet')}</p>
+                    <Link
+                      to="/mentors"
+                      className="inline-block text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"
+                    >
+                      {t('common:discover.find_your_mentor')}
+                    </Link>
                   </div>
                 )}
               </div>

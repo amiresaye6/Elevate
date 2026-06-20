@@ -8,12 +8,12 @@ import {
   Clock,
   Award,
   Lock,
-  X,
   ChevronLeft,
   ChevronRight,
   Globe,
   Code,
-  Check
+  Check,
+  ArrowLeft
 } from 'lucide-react'
 
 interface Stack {
@@ -43,7 +43,7 @@ interface Mentor {
 const BookingFlowPage: React.FC = () => {
   const { mentorId } = useParams<{ mentorId: string }>()
   const navigate = useNavigate()
-  const { t, i18n } = useTranslation(['student'])
+  const { t, i18n } = useTranslation(['student', 'common'])
   const isRtl = i18n.language.startsWith('ar')
 
   // States
@@ -264,30 +264,35 @@ const BookingFlowPage: React.FC = () => {
   const weekDaysShort = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0b1329]/90 backdrop-blur-sm overflow-y-auto">
-      {/* Modal overlay window card */}
-      <div className="relative bg-[#0e1730] border border-slate-800 text-slate-100 rounded-3xl max-w-4xl w-full overflow-hidden shadow-2xl flex flex-col md:flex-row min-h-[600px] animate-in zoom-in-95 duration-200">
-        
-        {/* Close button X */}
+    <div className="space-y-6 max-w-5xl mx-auto">
+      {/* Back Navigator Link */}
+      <div className="flex items-center">
         <button
-          onClick={() => navigate('/student/sessions')}
-          className={`absolute top-4 ${isRtl ? 'left-4' : 'right-4'} p-2 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors z-20`}
+          onClick={() => navigate('/mentors')}
+          className={`inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white transition-colors ${
+            isRtl ? 'flex-row-reverse' : ''
+          }`}
         >
-          <X className="w-5 h-5" />
+          <ArrowLeft className={`w-4 h-4 ${isRtl ? 'rotate-180' : ''}`} />
+          <span>{isRtl ? 'العودة إلى الموجهين' : 'Back to Mentors'}</span>
         </button>
+      </div>
 
+      {/* Main card grid container */}
+      <div className="bg-white dark:bg-[#0d162e] border border-slate-200 dark:border-slate-800/60 text-slate-900 dark:text-slate-100 rounded-3xl w-full overflow-hidden shadow-sm flex flex-col md:flex-row min-h-[600px] animate-in fade-in duration-200">
+        
         {/* LEFT COLUMN: Mentor summary */}
-        <div className="w-full md:w-[35%] bg-slate-900/40 p-6 md:p-8 flex flex-col justify-between border-b md:border-b-0 md:border-r border-slate-800/80">
+        <div className="w-full md:w-[35%] bg-slate-50 dark:bg-slate-900/40 p-6 md:p-8 flex flex-col justify-between border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-800/60">
           <div className="space-y-6">
             {/* Mentor Profile details */}
             <div className="space-y-3">
-              <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 flex items-center justify-center font-bold text-lg relative">
+              <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center font-bold text-lg relative">
                 {mentor.name.substring(0, 2).toUpperCase()}
-                <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-slate-900 rounded-full"></span>
+                <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-white dark:border-slate-900 rounded-full"></span>
               </div>
               <div>
-                <h3 className="font-extrabold text-xl leading-tight text-white">{mentor.name}</h3>
-                <span className="text-xs text-indigo-400 font-semibold flex items-center gap-1 mt-1">
+                <h3 className="font-extrabold text-xl leading-tight text-slate-800 dark:text-white">{mentor.name}</h3>
+                <span className="text-xs text-indigo-650 dark:text-indigo-400 font-semibold flex items-center gap-1 mt-1">
                   <Code className="w-3.5 h-3.5" />
                   {mentor.title}
                 </span>
@@ -295,40 +300,40 @@ const BookingFlowPage: React.FC = () => {
             </div>
 
             {/* Session details list */}
-            <div className="space-y-4 pt-4 border-t border-slate-800/50">
+            <div className="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800/50">
               <h4 className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                 {t('session_details_title')}
               </h4>
               
               <div className="space-y-3.5">
-                <div className={`flex items-start gap-3 text-xs leading-relaxed text-slate-300 ${isRtl ? 'flex-row-reverse text-right' : ''}`}>
-                  <Video className="w-4.5 h-4.5 text-indigo-400 flex-shrink-0 mt-0.5" />
+                <div className={`flex items-start gap-3 text-xs leading-relaxed text-slate-650 dark:text-slate-300 ${isRtl ? 'flex-row-reverse text-right' : ''}`}>
+                  <Video className="w-4.5 h-4.5 text-indigo-500 dark:text-indigo-400 flex-shrink-0 mt-0.5" />
                   <span>{t('session_video_details')}</span>
                 </div>
-                <div className={`flex items-center gap-3 text-xs text-slate-300 ${isRtl ? 'flex-row-reverse text-right' : ''}`}>
-                  <Clock className="w-4.5 h-4.5 text-indigo-400" />
+                <div className={`flex items-center gap-3 text-xs text-slate-650 dark:text-slate-300 ${isRtl ? 'flex-row-reverse text-right' : ''}`}>
+                  <Clock className="w-4.5 h-4.5 text-indigo-500 dark:text-indigo-400" />
                   <span>{t('session_duration_details')}</span>
                 </div>
-                <div className={`flex items-center gap-3 text-xs text-slate-300 ${isRtl ? 'flex-row-reverse text-right' : ''}`}>
-                  <Award className="w-4.5 h-4.5 text-indigo-400" />
+                <div className={`flex items-center gap-3 text-xs text-slate-650 dark:text-slate-300 ${isRtl ? 'flex-row-reverse text-right' : ''}`}>
+                  <Award className="w-4.5 h-4.5 text-indigo-500 dark:text-indigo-400" />
                   <span>{t('session_credit_details')}</span>
                 </div>
               </div>
             </div>
 
             {/* Expertise tags */}
-            <div className="space-y-3 pt-4 border-t border-slate-800/50">
+            <div className="space-y-3 pt-4 border-t border-slate-200 dark:border-slate-800/50">
               <h4 className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                 {t('expertise_title')}
               </h4>
               <div className="flex flex-wrap gap-1.5">
-                <span className="bg-slate-800/60 border border-slate-700/50 text-slate-300 px-2.5 py-1 rounded-lg text-xs font-semibold">
+                <span className="bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/50 text-slate-600 dark:text-slate-300 px-2.5 py-1 rounded-lg text-xs font-semibold">
                   {mentor.stack.name}
                 </span>
-                <span className="bg-slate-800/60 border border-slate-700/50 text-slate-300 px-2.5 py-1 rounded-lg text-xs font-semibold">
+                <span className="bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/50 text-slate-600 dark:text-slate-300 px-2.5 py-1 rounded-lg text-xs font-semibold">
                   System Design
                 </span>
-                <span className="bg-slate-800/60 border border-slate-700/50 text-slate-300 px-2.5 py-1 rounded-lg text-xs font-semibold">
+                <span className="bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/50 text-slate-600 dark:text-slate-300 px-2.5 py-1 rounded-lg text-xs font-semibold">
                   Algorithms
                 </span>
               </div>
@@ -336,8 +341,8 @@ const BookingFlowPage: React.FC = () => {
           </div>
 
           {/* Secure Lock Footer */}
-          <div className={`pt-6 border-t border-slate-800/50 flex items-center gap-2 text-[10px] text-slate-500 font-bold uppercase tracking-wider ${isRtl ? 'flex-row-reverse' : ''}`}>
-            <Lock className="w-3.5 h-3.5 text-slate-500" />
+          <div className={`pt-6 border-t border-slate-200 dark:border-slate-800/50 flex items-center gap-2 text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider ${isRtl ? 'flex-row-reverse' : ''}`}>
+            <Lock className="w-3.5 h-3.5 text-slate-450 dark:text-slate-500" />
             <span>{t('secure_booking_footer')}</span>
           </div>
         </div>
@@ -345,27 +350,27 @@ const BookingFlowPage: React.FC = () => {
         {/* RIGHT COLUMN: Selection details */}
         <div className="flex-1 p-6 md:p-8 space-y-6 flex flex-col justify-between overflow-y-auto">
           <div className="space-y-6">
-            <h3 className="font-extrabold text-xl text-white pt-2">{t('booking_title')}</h3>
+            <h3 className="font-extrabold text-xl text-slate-800 dark:text-white pt-2">{t('booking_title')}</h3>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
               
               {/* Calendar card grid */}
-              <div className="lg:col-span-7 bg-slate-900/30 border border-slate-800 rounded-2xl p-4 space-y-4">
+              <div className="lg:col-span-7 bg-slate-50/50 dark:bg-slate-900/30 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 space-y-4">
                 {/* Month Navigator Header */}
                 <div className="flex justify-between items-center px-1">
-                  <span className="font-extrabold text-sm text-white">
+                  <span className="font-extrabold text-sm text-slate-800 dark:text-white">
                     {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
                   </span>
                   <div className="flex gap-1">
                     <button
                       onClick={prevMonth}
-                      className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
+                      className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors"
                     >
                       <ChevronLeft className="w-4.5 h-4.5" />
                     </button>
                     <button
                       onClick={nextMonth}
-                      className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
+                      className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors"
                     >
                       <ChevronRight className="w-4.5 h-4.5" />
                     </button>
@@ -376,7 +381,7 @@ const BookingFlowPage: React.FC = () => {
                 <div className="grid grid-cols-7 gap-y-2.5 gap-x-1.5 text-center">
                   {/* Weekday headers */}
                   {weekDaysShort.map((day) => (
-                    <span key={day} className="text-[10px] font-bold text-slate-500 uppercase">
+                    <span key={day} className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase">
                       {day}
                     </span>
                   ))}
@@ -403,8 +408,8 @@ const BookingFlowPage: React.FC = () => {
                           isSelected
                             ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/10'
                             : isAvailable
-                            ? 'text-slate-200 hover:bg-slate-800/80 cursor-pointer border border-indigo-500/20'
-                            : 'text-slate-600 opacity-20 pointer-events-none'
+                            ? 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/80 cursor-pointer border border-indigo-500/20 dark:border-indigo-500/30'
+                            : 'text-slate-350 dark:text-slate-650 opacity-20 pointer-events-none'
                         }`}
                       >
                         <span>{dayNum}</span>
@@ -420,7 +425,7 @@ const BookingFlowPage: React.FC = () => {
                 </div>
 
                 {/* Timezone label */}
-                <div className="flex items-center gap-1.5 text-[10px] text-slate-500 font-bold uppercase pt-2 pl-1">
+                <div className="flex items-center gap-1.5 text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase pt-2 pl-1">
                   <Globe className="w-3.5 h-3.5" />
                   <span>{t('timezone_local')} &bull; {Intl.DateTimeFormat().resolvedOptions().timeZone}</span>
                 </div>
@@ -448,7 +453,7 @@ const BookingFlowPage: React.FC = () => {
                             className={`py-3 px-2 rounded-xl text-xs font-bold transition-all ${
                               isSelected
                                 ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/10 border border-transparent'
-                                : 'bg-slate-900/40 hover:bg-slate-800 text-slate-200 border border-slate-800'
+                                : 'bg-slate-50 dark:bg-slate-900/40 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800'
                             }`}
                           >
                             {format12Hour(slot24)}
@@ -456,17 +461,16 @@ const BookingFlowPage: React.FC = () => {
                         )
                       })}
                     </div>
-
-                    {/* Edit button placeholder matching mockup */}
+                                 {/* Edit button placeholder matching mockup */}
                     <button 
                       onClick={() => toast('Availability editing is coming soon!', { icon: '✏️' })}
-                      className="w-full py-2.5 border border-slate-850 bg-slate-900/10 hover:bg-slate-900/30 text-xs font-semibold text-slate-400 hover:text-slate-350 rounded-xl transition-all flex items-center justify-center gap-1.5"
+                      className="w-full py-2.5 border border-slate-200 dark:border-slate-850 bg-slate-50 dark:bg-slate-900/10 hover:bg-slate-100 dark:hover:bg-slate-900/30 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-350 rounded-xl transition-all flex items-center justify-center gap-1.5"
                     >
                       ✏️ {t('edit_btn')}
                     </button>
                   </div>
                 ) : (
-                  <div className="text-xs text-slate-500 italic p-6 border border-dashed border-slate-800 rounded-2xl text-center">
+                  <div className="text-xs text-slate-400 dark:text-slate-500 italic p-6 border border-dashed border-slate-200 dark:border-slate-800 rounded-2xl text-center">
                     Please choose a date from the calendar to view available slots
                   </div>
                 )}
@@ -484,14 +488,14 @@ const BookingFlowPage: React.FC = () => {
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder={t('goals_placeholder')}
                 rows={3}
-                className="w-full bg-slate-900/30 border border-slate-800 rounded-xl p-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-500/50 text-sm text-slate-100 placeholder-slate-500 leading-relaxed resize-none transition-all"
+                className="w-full bg-slate-50 dark:bg-slate-900/30 border border-slate-200 dark:border-slate-800 rounded-xl p-4 focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-500/50 text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 leading-relaxed resize-none transition-all"
               />
             </div>
           </div>
 
           {/* Confirm & policy block */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-6 border-t border-slate-800/60 bg-[#0e1730]">
-            <p className="text-xs text-slate-400 max-w-md leading-relaxed">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-6 border-t border-slate-200 dark:border-slate-800/60 bg-white dark:bg-[#0d162e]">
+            <p className="text-xs text-slate-500 dark:text-slate-400 max-w-md leading-relaxed">
               {t('cancel_agreement')}
             </p>
 
