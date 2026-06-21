@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { StacksService } from './stacks.service';
 import { createStackDto,updateStackDto } from './dto/Stack.dto'
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -10,9 +10,18 @@ export class StacksController {
   constructor(private readonly stacksService: StacksService) {}
 
   @Get()
-  async getAll() {
-    return await this.stacksService.getAll();
+  async getAllStacks(@Query('page') page?: number) {
+    if (!page) {
+      return await this.stacksService.getAll();
+    }
+    const data= await this.stacksService.getAllStacksWithPagination(page);
+    return{
+      success:true,
+      message:"stacks fetched successfully",
+      data
+    }
   }
+
 
   @UseGuards(JwtAuthGuard,RolesGuard)
   @Roles('ADMIN')

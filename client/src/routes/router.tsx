@@ -36,7 +36,8 @@ const SessionDetailsPage = lazy(() => import('../pages/student/SessionDetailsPag
 const AdminOverView = lazy(() => import('../pages/admin/AdminOverview'))
 const ControlUsers = lazy(() => import('../pages/admin/ControlUsers'))
 const SessionsLogs = lazy(()=> import('../pages/admin/SessionsLogs'))
-
+const ControlStacks = lazy(()=> import('../pages/admin/ControlStacks'))
+const MentorsVerifications = lazy(()=> import('../pages/admin/MentorsVerifications'))
 // Discover Section Pages 
 const LandingPage = lazy(() => import('../pages/discover/Home'))
 const MentorDiscoveryPage = lazy(() => import('../pages/discover/Mentors'))
@@ -274,7 +275,7 @@ export const router = createBrowserRouter([
             path: 'admin',
             element: (
               <Suspense fallback={<LoadingFallback />}>
-                <AdminOverView /> {/* Replace with <AdminDashboardPage /> when implemented */}
+                <AdminOverView /> 
               </Suspense>
             ),
           },
@@ -282,7 +283,7 @@ export const router = createBrowserRouter([
             path: 'admin/users',
             element: (
               <Suspense fallback={<LoadingFallback />}>
-                <ControlUsers /> {/* Replace with <UserManagementPage /> when implemented */}
+                <ControlUsers />
               </Suspense>
             ),
           },
@@ -290,7 +291,7 @@ export const router = createBrowserRouter([
             path: 'admin/stacks',
             element: (
               <Suspense fallback={<LoadingFallback />}>
-                <NotFoundPage /> {/* Replace with <StackManagementPage /> when implemented */}
+                <ControlStacks />
               </Suspense>
             ),
           },
@@ -298,10 +299,19 @@ export const router = createBrowserRouter([
             path: 'admin/sessions',
             element: (
               <Suspense fallback={<LoadingFallback />}>
-                <SessionsLogs /> {/* Replace with <SessionMonitoringPage /> when implemented */}
+                <SessionsLogs /> 
               </Suspense>
             ),
           },
+          {
+          path: 'admin/verifications',
+            element: (
+              <Suspense fallback={<LoadingFallback />}>
+                <MentorsVerifications /> 
+              </Suspense>
+            ),
+          },
+          
           {
             path: 'profile', // Accessible here so admin stays inside AdminLayout
             element: (

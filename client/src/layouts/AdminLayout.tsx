@@ -46,13 +46,14 @@ const AdminLayout: React.FC = () => {
     if (path === '/admin/users') return t('users control')
     if (path === '/admin/stacks') return t('stacks control')
     if (path === '/admin/sessions') return t('session logs')
+    if (path === '/admin/verifications') return t('users control')
     return t('sessions')
   }
 
   const menuItems = [
     { label: t('overview'), path: '/admin',  icon: LayoutDashboard  },
-    { label: t('users control'), path: '/admin/users', icon: Users },
-    { label: t('stacks control'), path: '/admin/stacks', icon: FileStack  },
+    { label: t('users management'), path: '/admin/users', icon: Users },
+    { label: t('stacks management'), path: '/admin/stacks', icon: FileStack  },
     { label: t('session logs'), path: '/admin/sessions', icon: Calendar  }
   ]
 
