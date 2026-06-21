@@ -1,8 +1,8 @@
 {
   "portal_header": "بوابة المشرف",
   "overview": "نظرة عامة",
-  "users control": "إدارة المستخدمين",
-  "stacks control": "إدارة التقنيات",
+  "users management": "إدارة المستخدمين",
+  "stacks management": "إدارة التقنيات",
   "session logs": "سجلات الجلسات",
   "error_loading": "خطأ في تحميل البيانات",
   "error_retry": "إعادة المحاولة",
@@ -71,5 +71,6 @@
   "name_length_error":"طول الاسم يجب ان يكون بين 3 و 30 حرف",
   "desc_required":"الوصف مطلوب",
   "desc_length_error":"يجب ان يكون الوصف بين 10 الى 200 حرف",
-  "no_stacks_found":"لا توجد نتائج"
+  "no_stacks_found":"لا توجد نتائج",
+  "stacks control":"ادارة التقنيات"
 }

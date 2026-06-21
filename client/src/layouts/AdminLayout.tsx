@@ -51,8 +51,8 @@ const AdminLayout: React.FC = () => {
 
   const menuItems = [
     { label: t('overview'), path: '/admin',  icon: LayoutDashboard  },
-    { label: t('users managment'), path: '/admin/users', icon: Users },
-    { label: t('stacks managment'), path: '/admin/stacks', icon: FileStack  },
+    { label: t('users management'), path: '/admin/users', icon: Users },
+    { label: t('stacks management'), path: '/admin/stacks', icon: FileStack  },
     { label: t('session logs'), path: '/admin/sessions', icon: Calendar  }
   ]
 

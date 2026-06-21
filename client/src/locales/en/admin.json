@@ -1,8 +1,8 @@
 {
   "portal_header": "Admin Portal",
   "overview": "Overview",
-  "users control": "Users Control",
-  "stacks control": "Stacks Control",
+  "users management": "Users Management",
+  "stacks management": "Stacks Management",
   "session logs": "Session Logs",
   "error_loading": "Error loading data",
   "error_retry": "Retry",
