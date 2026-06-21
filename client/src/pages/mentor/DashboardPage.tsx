@@ -1,24 +1,39 @@
-import { useEffect } from 'react'
+import { useEffect,useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../store'
 import { fetchMentorDashboard } from '../../store/slices/mentorSlice'
 import { fetchMentorSessions } from '../../store/slices/sessionSlice'
+import authService from '../../services/authService'
+import toast from 'react-hot-toast'
 
 export default function DashboardPage() {
   const dispatch = useAppDispatch()
 
-  const { user } = useAppSelector((s) => s.auth)
-  const MENTOR_ID = user?.mentorProfileId ?? 1
-
+  // const { user } = useAppSelector((s) => s.auth)
+  // const MENTOR_ID = user?.mentorProfileId ?? 1
+  const [mentorId, setMentorId] = useState<number | null>(null)
   const { dashboard, loading } = useAppSelector((s) => s.mentor)
   const sessionState = useAppSelector((s) => s.session)
+  useEffect(() => {
+    const loadMentorProfile = async () => {
+      try {
+        const res = await authService.getProfile()
+        const realMentorId = (res.data as any)?.profile?.id
+        if (realMentorId) setMentorId(realMentorId)
+      } catch {
+        toast.error('Failed to load mentor profile')
+      }
+    }
+    loadMentorProfile()
+  }, [])
 
   useEffect(() => {
-    if (MENTOR_ID) {
-      dispatch(fetchMentorDashboard(MENTOR_ID))
-      dispatch(fetchMentorSessions(MENTOR_ID))
+    if (mentorId) {
+      dispatch(fetchMentorDashboard(mentorId))
+      dispatch(fetchMentorSessions(mentorId))
     }
-  }, [dispatch, MENTOR_ID])
+  }, [dispatch, mentorId])
+  
 
   const rawSessions = sessionState?.sessions
   const sessionsArray = Array.isArray(rawSessions)

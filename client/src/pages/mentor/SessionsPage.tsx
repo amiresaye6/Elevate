@@ -2,23 +2,37 @@ import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useAppDispatch, useAppSelector } from '../../store'
 import { fetchMentorSessions, updateSession } from '../../store/slices/sessionSlice'
+import authService from '../../services/authService'
 import type { SessionStatus } from '../../types/mentor.types'
 
 export default function SessionsPage() {
   const dispatch = useAppDispatch()
   
-  const { user } = useAppSelector((s) => s.auth)
+  // const { user } = useAppSelector((s) => s.auth)
   const { sessions, loading, error } = useAppSelector((s) => s.session)
-  const MENTOR_ID = user?.mentorProfileId ?? 1
-
+  // const MENTOR_ID = user?.mentorProfileId ?? 1
+  const [mentorId, setMentorId] = useState<number | null>(null)
   const [updatingId, setUpdatingId] = useState<number | null>(null)
   const [evaluationNotes, setEvaluationNotes] = useState<Record<number, string>>({})
 
   useEffect(() => {
-    if (MENTOR_ID) {
-      dispatch(fetchMentorSessions(MENTOR_ID))
+    const loadMentorProfile = async () => {
+      try {
+        const res = await authService.getProfile()
+        const realMentorId = (res.data as any)?.profile?.id
+        if (realMentorId) setMentorId(realMentorId)
+      } catch {
+        toast.error('Failed to load mentor profile')
+      }
     }
-  }, [dispatch, MENTOR_ID])
+    loadMentorProfile()
+  }, [])
+
+  useEffect(() => {
+    if (mentorId) {
+      dispatch(fetchMentorSessions(mentorId))
+    }
+  }, [dispatch, mentorId])
 
   const handleStatusUpdate = async (
     sessionId: number,
@@ -43,7 +57,9 @@ export default function SessionsPage() {
         })
       ).unwrap()
       toast.success(`Session marked as ${status}`)
-      dispatch(fetchMentorSessions(MENTOR_ID))
+      if (mentorId) {
+        dispatch(fetchMentorSessions(mentorId as number))
+      }
     } catch (err: any) {
       toast.error(err ?? 'Failed to update session')
     } finally {
