@@ -32,6 +32,10 @@ const StudentDashboardPage = lazy(() => import('../pages/student/StudentDashboar
 const BookingFlowPage = lazy(() => import('../pages/student/BookingFlowPage'))
 const SessionDetailsPage = lazy(() => import('../pages/student/SessionDetailsPage'))
 
+// admin pages
+const AdminOverView = lazy(() => import('../pages/admin/AdminOverview'))
+const ControlUsers = lazy(() => import('../pages/admin/ControlUsers'))
+const SessionsLogs = lazy(()=> import('../pages/admin/SessionsLogs'))
 
 // Discover Section Pages 
 const LandingPage = lazy(() => import('../pages/discover/Home'))
@@ -270,7 +274,7 @@ export const router = createBrowserRouter([
             path: 'admin',
             element: (
               <Suspense fallback={<LoadingFallback />}>
-                <NotFoundPage /> {/* Replace with <AdminDashboardPage /> when implemented */}
+                <AdminOverView /> {/* Replace with <AdminDashboardPage /> when implemented */}
               </Suspense>
             ),
           },
@@ -278,7 +282,7 @@ export const router = createBrowserRouter([
             path: 'admin/users',
             element: (
               <Suspense fallback={<LoadingFallback />}>
-                <NotFoundPage /> {/* Replace with <UserManagementPage /> when implemented */}
+                <ControlUsers /> {/* Replace with <UserManagementPage /> when implemented */}
               </Suspense>
             ),
           },
@@ -294,7 +298,7 @@ export const router = createBrowserRouter([
             path: 'admin/sessions',
             element: (
               <Suspense fallback={<LoadingFallback />}>
-                <NotFoundPage /> {/* Replace with <SessionMonitoringPage /> when implemented */}
+                <SessionsLogs /> {/* Replace with <SessionMonitoringPage /> when implemented */}
               </Suspense>
             ),
           },
