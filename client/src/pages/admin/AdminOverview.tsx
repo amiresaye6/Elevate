@@ -192,7 +192,9 @@ const AdminOverview: React.FC = () => {
                                                             user.role === 'MENTOR' ? 'bg-purple-50 text-purple-600 dark:bg-purple-950/30 dark:text-purple-400' :
                                                             'bg-indigo-50 text-indigo-600 dark:bg-indigo-950/30 dark:text-indigo-400'
                                                         }`}>
-                                                            {user.role}
+                                                            {user.role=="ADMIN"&&t('ADMIN')}
+                                                            {user.role=="MENTOR"&&t('MENTOR')}
+                                                            {user.role=="STUDENT"&&t('STUDENT')}
                                                         </span>
                                                     </td>
                                                     <td className="px-4 py-3">
@@ -238,7 +240,9 @@ const AdminOverview: React.FC = () => {
                                                             session.status === 'PENDING' ? 'bg-amber-50 text-amber-600 dark:bg-amber-950/30 dark:text-amber-400' :
                                                             'bg-slate-50 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
                                                         }`}>
-                                                            {session.status}
+                                                            {session.status=="COMPLETED"&&t('COMPLETED')}
+                                                            {session.status=="SCHEDULED"&&t('SCHEDULED')}
+                                                            {session.status=="CANCELED"&&t('CANCELLED')}
                                                         </span>
                                                     </td>
                                                 </tr>
