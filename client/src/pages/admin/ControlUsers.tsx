@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { api } from '../../services/api'
 import { useAppDispatch, useAppSelector } from '../../store/index'
 import { fetchAdminUsers } from '../../store/slices/adminSlice'
-import { Search, UserX, UserCheck, ArrowLeft, ArrowRight, ShieldAlert, RotateCcw } from 'lucide-react'
+import { Search, UserX, UserCheck, ArrowLeft, ArrowRight, ShieldAlert, RotateCcw, CheckCircle } from 'lucide-react'
 
 interface User {
   id: number;
@@ -145,11 +145,24 @@ const ControlUsers: React.FC = () => {
         <div className="space-y-8" dir={isRtl ? 'rtl' : 'ltr'}>
             
             {/* Header  */}
-            <div className={`p-8 bg-gradient-to-r from-slate-900 via-indigo-950 to-purple-800 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/80 rounded-3xl text-white space-y-2 ${isRtl ? 'text-right' : 'text-left'}`}>
-                <h1 className="text-2xl font-bold">{t('users_management')}</h1>
-                <p className="text-sm text-slate-300 max-w-2xl">
-                    {t('users_management_subtitle') }
-                </p>
+            <div className={`p-8 bg-gradient-to-r from-slate-900 via-indigo-950 to-purple-800 dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/80 rounded-3xl text-white flex flex-col md:flex-row md:items-center md:justify-between gap-4 ${isRtl ? 'text-right' : 'text-left'}`}>
+                <div className="space-y-2">
+                    <h1 className="text-2xl font-bold">{t('users_management')}</h1>
+                    <p className="text-sm text-slate-300 max-w-2xl">
+                        {t('users_management_subtitle') }
+                    </p>
+                </div>
+                
+                {/* زر الانتقال إلى صفحة التحققات */}
+                <div className="flex-shrink-0">
+                    <Link 
+                        to="/admin/verifications" 
+                        className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 dark:bg-slate-800/50 dark:hover:bg-slate-800 backdrop-blur-sm text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-all border border-white/10 shadow-sm"
+                    >
+                        <CheckCircle className="w-4 h-4" />
+                        <span>{t('go_to_verifications') || (isRtl ? 'التحققات' : 'Verifications')}</span>
+                    </Link>
+                </div>
             </div>
 
             {/* Error */}

@@ -46,6 +46,7 @@ const AdminLayout: React.FC = () => {
     if (path === '/admin/users') return t('users control')
     if (path === '/admin/stacks') return t('stacks control')
     if (path === '/admin/sessions') return t('session logs')
+    if (path === '/admin/verifications') return t('users control')
     return t('sessions')
   }
 

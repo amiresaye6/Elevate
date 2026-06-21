@@ -72,5 +72,15 @@
   "desc_required":"الوصف مطلوب",
   "desc_length_error":"يجب ان يكون الوصف بين 10 الى 200 حرف",
   "no_stacks_found":"لا توجد نتائج",
-  "stacks control":"ادارة التقنيات"
+  "stacks control":"ادارة التقنيات",
+  "users control":"ادارة المستخدمين",
+  "mentors_verifications":"لوحة الموافقة على المشرفين",
+  "mentors_verifications_subtitle":"مشرفين بإنتظارك للموافقة عليهم للبدء فى العمل",
+  "back_to_users":"العودة للمستخدمين",
+  "approve_and_verify":"الموافقة والتفعيل",
+  "Mentor":"مشرف",
+  "hour":"ساعة",
+  "Stack ID":"تقنية ID",
+  "no_pending_mentors":"لا توجد طلبات حالية",
+  "go_to_verifications":"طلبات المشرفين الجدد"
 }

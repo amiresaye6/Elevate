@@ -66,6 +66,14 @@
   "name_length_error":"name length must be between 3:30 chars",
   "desc_required":"desc required",
   "desc_length_error":"description must be between 10:200 chars",
-  "no_stacks_found":"no stacks found"
+  "no_stacks_found":"no stacks found",
+  "mentors_verifications":"mentors verifications",
+  "mentors_verifications_subtitle":"mentors waiting your verifications",
+  "back_to_users":"back to users",
+  "approve_and_verify":"approve and verify",
+  "no_pending_mentors":"no pending mentors",
+  "Mentor":"مشرف",
+  "User":"مستخدم",
+  "go_to_verifications":"mentors verifications"
 
 }

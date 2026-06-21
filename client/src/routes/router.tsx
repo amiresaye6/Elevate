@@ -37,6 +37,7 @@ const AdminOverView = lazy(() => import('../pages/admin/AdminOverview'))
 const ControlUsers = lazy(() => import('../pages/admin/ControlUsers'))
 const SessionsLogs = lazy(()=> import('../pages/admin/SessionsLogs'))
 const ControlStacks = lazy(()=> import('../pages/admin/ControlStacks'))
+const MentorsVerifications = lazy(()=> import('../pages/admin/MentorsVerifications'))
 // Discover Section Pages 
 const LandingPage = lazy(() => import('../pages/discover/Home'))
 const MentorDiscoveryPage = lazy(() => import('../pages/discover/Mentors'))
@@ -302,6 +303,15 @@ export const router = createBrowserRouter([
               </Suspense>
             ),
           },
+          {
+          path: 'admin/verifications',
+            element: (
+              <Suspense fallback={<LoadingFallback />}>
+                <MentorsVerifications /> 
+              </Suspense>
+            ),
+          },
+          
           {
             path: 'profile', // Accessible here so admin stays inside AdminLayout
             element: (
