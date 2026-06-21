@@ -28,6 +28,12 @@ interface AdminState {
     totalItems: number;
     totalPages: number;
   };
+  sessionsPagination: {
+     page: number;
+     limit: number; 
+     totalItems: number; 
+     totalPages: number
+  };
   loading: boolean;
   error: string | null;
 }
@@ -40,6 +46,12 @@ const initialState: AdminState = {
     limit: 10,
     totalItems: 0,
     totalPages: 1
+  },
+  sessionsPagination: {
+    page: 1, 
+    limit: 10, 
+    totalItems: 0, 
+    totalPages: 1 
   },
   loading: false,
   error: null
@@ -62,11 +74,11 @@ export const fetchAdminUsers = createAsyncThunk(
 
 export const fetchAdminSessions = createAsyncThunk(
   'admin/fetchSessions',
-  async (page:number, { rejectWithValue }) => {
+  async (page: number, { rejectWithValue }) => {
     try {
       const response = await api.get<any>(`admin/sessions?page=${page}`);
       if (response && response.data && response.data.success) {
-        return response.data.data.sessions;
+        return response.data.data;
       }
       return rejectWithValue('Failed to fetch sessions');
     } catch (err: any) {
@@ -107,7 +119,8 @@ const adminSlice = createSlice({
       })
       .addCase(fetchAdminSessions.fulfilled, (state, action) => {
         state.loading = false;
-        state.sessions = action.payload;
+        state.sessions = action.payload.sessions; // المصفوفة
+        state.sessionsPagination = action.payload.pagination; // تحديث الصفحات ديناميكياً
       })
       .addCase(fetchAdminSessions.rejected, (state, action) => {
         state.loading = false;

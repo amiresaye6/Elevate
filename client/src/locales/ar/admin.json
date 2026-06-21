@@ -40,5 +40,14 @@
   "COMPLETED": "مكتمل",
   "SCHEDULED":"مجدول",
   "CANCELLED":"ملغى",
-  "no_users_found":"لم يتم العثور على اى مستخدمين"
+  "PENDING":"جارى",
+  "no_users_found":"لم يتم العثور على اى مستخدمين",
+  "sessions_logs":"سجلات الجلسات",
+  "sessions_logs_subtitle":"الاطلاع على جميع معلومات الجلسات",
+  "search_session_by_id":"بحث بإستخدام الid",
+  "table_mentor_id":"مشرف",
+  "table_student_id":"طالب",
+  "Date":"تاريخ",
+  "Status":"حالة",
+  "clear_search":"مسح البحث"
 }

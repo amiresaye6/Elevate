@@ -317,11 +317,11 @@ const ControlUsers: React.FC = () => {
                             className="flex items-center gap-1 text-xs font-semibold px-4 py-2 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50 transition-colors text-slate-700 dark:text-slate-300"
                         >
                             {isRtl ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
-                            {t('pagination_prev') || 'السابق'}
+                            {t('pagination_prev')}
                         </button>
                         
                         <span className="text-xs font-bold text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 px-3 py-1.5 rounded-lg">
-                            {t('page') || 'صفحة'} {currentPage}
+                            {t('page')} {currentPage}
                         </span>
 
                         <button
@@ -329,7 +329,7 @@ const ControlUsers: React.FC = () => {
                             disabled={currentPage >= usersPagination.totalPages || isPageLoading} 
                             className="flex items-center gap-1 text-xs font-semibold px-4 py-2 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50 transition-colors text-slate-700 dark:text-slate-300"
                         >
-                            {t('pagination_next') || 'التالي'}
+                            {t('pagination_next')}
                             {isRtl ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
                         </button>
                     </div>

@@ -36,5 +36,13 @@
   "COMPLETED": "COMPLETED",
   "SCHEDULED":"SCHEDULED",
   "CANCELLED":"CANCELLED",
-  "no_users_found":"no users found"
+  "PENDING":"PENDING",
+  "no_users_found":"no users found",
+  "sessions_logs":"Sessions Logs",
+  "sessions_logs_subtitle":"monitor all sessions' logs",
+  "search_session_by_id":"search session by id",
+  "table_mentor_id":"mentor id",
+  "table_student_id":"student id",
+  "Date":"Date",
+  "Status":"Status"
 }

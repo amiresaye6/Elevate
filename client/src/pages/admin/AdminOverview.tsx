@@ -235,14 +235,16 @@ const AdminOverview: React.FC = () => {
                                                     <td className="px-4 py-3 font-medium text-slate-900 dark:text-slate-200 max-w-[150px] truncate">{session.description}</td>
                                                     <td className="px-4 py-3 text-xs">{new Date(session.startTime).toLocaleDateString(isRtl ? 'ar-EG' : 'en-US')}</td>
                                                     <td className="px-4 py-3">
-                                                        <span className={`px-2 py-1 text-xs rounded-lg font-semibold ${
+                                                        <span className={`px-2.5 py-1 text-xs rounded-lg font-semibold ${
                                                             session.status === 'COMPLETED' ? 'bg-green-50 text-green-600 dark:bg-green-950/30 dark:text-green-400' :
                                                             session.status === 'PENDING' ? 'bg-amber-50 text-amber-600 dark:bg-amber-950/30 dark:text-amber-400' :
-                                                            'bg-slate-50 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
+                                                            session.status === 'SCHEDULED' ? 'bg-amber-50 text-blue-600 dark:bg-amber-950/30 dark:text-blue-400' :
+                                                            'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
                                                         }`}>
                                                             {session.status=="COMPLETED"&&t('COMPLETED')}
                                                             {session.status=="SCHEDULED"&&t('SCHEDULED')}
                                                             {session.status=="CANCELED"&&t('CANCELLED')}
+                                                            {session.status=="PENDING"&&t('PENDING')}
                                                         </span>
                                                     </td>
                                                 </tr>
