@@ -1,4 +1,4 @@
-import { Controller, UseGuards } from '@nestjs/common';
+import { Controller, Post, UseGuards } from '@nestjs/common';
 import { Get, Patch} from '@nestjs/common'
 import { Param, Body, Query, ParseIntPipe} from '@nestjs/common'
 
@@ -50,6 +50,30 @@ export class AdminController {
             success:'true', 
             message:'dashboard data was fetched successfully', 
             data:{dashboard}
+        }
+    }
+
+    @Get('/need-verify')
+    @UseGuards(JwtAuthGuard,RolesGuard)
+    @Roles('ADMIN')
+    async getNeedVerification(@Query('page',ParseIntPipe) page: number){
+        const data = await this.adminService.getNeedVerification(page);
+        return {
+        success : true,
+        message : "mentors fetched successfully",
+        data
+        }
+    }
+
+    @Post('/verify/:id')
+    @UseGuards(JwtAuthGuard,RolesGuard)
+    @Roles('ADMIN')
+    async verifyMentor(@Param('id')id:number){
+        const mentor = await this.adminService.verifyMentor(id);
+        return {
+        success : true,
+        message : "mentor verified successfully",
+        data : {mentor}
         }
     }
 }

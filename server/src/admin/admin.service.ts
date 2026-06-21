@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from './../prisma/prisma.service'
 
 @Injectable()
@@ -71,5 +71,36 @@ export class AdminService {
         return {usersCount, mentorsCount, studentsCount, sessionCount}
     }
 
+    async getNeedVerification(page:number){
+    try{
+      const [mentors,totalItems] = await Promise.all([
+        this.prismaService.mentorProfile.findMany({
+          where:{isVerified:false},
+          skip:(page-1)*10,
+          take:10,
+        }),
+        this.prismaService.stack.count()
+      ])
+    const totalPages = Math.ceil(totalItems/10);
+    if(page && page>totalPages && totalPages>0){
+      throw new NotFoundException(`page not found. max page number = ${totalPages}`)
+    }
+    const pagination = {page,limit:10,totalItems,totalPages};  
+    return {mentors,pagination}
+    }catch(error){
+      throw new BadRequestException('an error occured');
+    }
+  }
 
+    async verifyMentor(id:number){
+        try{
+            const mentor = await this.prismaService.mentorProfile.update({
+                where:{id},
+                data:{isVerified:true}
+            })
+            return mentor;
+        }catch(error:any){
+            throw new BadRequestException('an error occured');
+        }
+    } 
 }
