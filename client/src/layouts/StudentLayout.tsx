@@ -8,7 +8,7 @@ import {
   LayoutDashboard,
   Calendar,
   GraduationCap,
-  BookOpen,
+  // BookOpen,
   Settings,
   Zap,
   HelpCircle,
@@ -44,9 +44,7 @@ const StudentLayout: React.FC = () => {
   }
 
   const handleNewSession = () => {
-    toast(t('toast_new_session_click'), {
-      icon: '🗓️',
-    })
+    navigate('/mentors')
   }
 
   const getPageTitle = () => {
@@ -54,6 +52,7 @@ const StudentLayout: React.FC = () => {
     if (path === '/student/dashboard') return t('dashboard')
     if (path === '/student/sessions') return t('sessions')
     if (path === '/profile') return t('profile_settings')
+    if (path.startsWith('/student/book/')) return t('new_session')
     return t('sessions')
   }
 
@@ -61,7 +60,7 @@ const StudentLayout: React.FC = () => {
     { label: t('dashboard'), path: '/student/dashboard', icon: LayoutDashboard },
     { label: t('sessions'), path: '/student/sessions', icon: Calendar },
     { label: t('mentors'), path: '/mentors', icon: GraduationCap },
-    { label: t('resources'), path: '/student/resources', icon: BookOpen },
+    // { label: t('resources'), path: '/student/resources', icon: BookOpen },
     { label: t('settings'), path: '/profile', icon: Settings }
   ]
 

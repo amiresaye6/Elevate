@@ -6,7 +6,6 @@ import { toast } from 'react-hot-toast'
 import {
   Search,
   Calendar,
-  MoreHorizontal,
   ChevronLeft,
   ChevronRight,
   Eye,
@@ -14,13 +13,6 @@ import {
   AlertCircle,
   CheckCircle2
 } from 'lucide-react'
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 
 interface Stack {
   id: number
@@ -413,32 +405,27 @@ const SessionHistoryPage: React.FC = () => {
                       </td>
 
                       <td className="px-6 py-5 text-center">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <button className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 transition-colors focus:outline-none">
-                              <MoreHorizontal className="w-5 h-5" />
-                            </button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align={isRtl ? 'start' : 'end'} className="bg-white dark:bg-[#0e1730] border border-slate-200 dark:border-slate-800/80 shadow-xl rounded-xl p-1 z-55">
-                            <DropdownMenuItem
-                              onClick={() => navigate(`/student/sessions/${session.id}`)}
-                              className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer focus:outline-none"
+                        <div className="flex items-center justify-center gap-2">
+                          <button
+                            onClick={() => navigate(`/student/sessions/${session.id}`)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950/40 dark:hover:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200/30 dark:border-indigo-800/30 transition-all focus:outline-none"
+                            title={t('action_view_details')}
+                          >
+                            <Eye className="w-4 h-4" />
+                            <span>{t('action_view_details')}</span>
+                          </button>
+                          
+                          {session.status === 'SCHEDULED' && (
+                            <button
+                              onClick={() => handleCancelTrigger(session)}
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/20 dark:hover:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200/30 dark:border-rose-800/30 transition-all focus:outline-none"
+                              title={t('action_cancel')}
                             >
-                              <Eye className="w-4 h-4 text-slate-400" />
-                              <span>{t('action_view_details')}</span>
-                            </DropdownMenuItem>
-
-                            {session.status === 'SCHEDULED' && (
-                              <DropdownMenuItem
-                                onClick={() => handleCancelTrigger(session)}
-                                className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/20 cursor-pointer focus:outline-none"
-                              >
-                                <XCircle className="w-4 h-4 text-rose-400" />
-                                <span>{t('action_cancel')}</span>
-                              </DropdownMenuItem>
-                            )}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                              <XCircle className="w-4 h-4" />
+                              <span>{t('action_cancel')}</span>
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   )

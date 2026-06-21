@@ -18,6 +18,78 @@
   "footer": {
     "all_rights_reserved": "كل الحقوق محفوظة."
   },
+  "discover": {
+    "tagline": "ارتقِ بمسيرتك الهندسية",
+    "hero_prefix": "ال",
+    "hero_highlight": "IDE",
+    "hero_suffix": "للتوجيه",
+    "hero_subtitle": "تواصل مع أفضل الموجهين من كبار شركات التقنية. صحح مسارك الوظيفي، صمم مستقبلك، وحقق النجاح من خلال جلسات فردية مخصصة.",
+    "find_your_mentor": "ابحث عن موجه →"
+  },
+  "home": {
+    "stats": {
+      "expert_mentors": "موجهين خبراء",
+      "sessions_completed": "الجلسات المكتملة",
+      "average_rating": "متوسط التقييم"
+    },
+    "featured_title": "الموجهين المميزين",
+    "featured_subtitle": "تصفح أفضل الموجهين المختارين لمساعدتك في تطوير مسيرتك.",
+    "view_all_mentors": "عرض كل الموجهين",
+    "no_mentors_found": "لم يتم العثور على أي موجهين. تفقّد بيانات الخادم أو أعد المحاولة.",
+    "profile_fallback_title": "مهندس أول",
+    "profile_fallback_bio": "لا توجد سيرة ذاتية متاحة.",
+    "view_profile": "عرض الملف الشخصي",
+    "testimonial_section_title": "يثق بنا المهندسون في كل مكان",
+    "testimonial_1": "ساعدتني الجلسات على الحصول على مقابلة عمل في شركة تقنية كبرى خلال ثلاثة أسابيع فقط.",
+    "testimonial_1_author": "عائشة ك.",
+    "testimonial_1_role": "مهندسة برمجيات",
+    "testimonial_2": "جعلتني إرشادات الموجه ملفي الشخصي وتحضير المقابلات في أفضل حال.",
+    "testimonial_2_author": "عمر إ.",
+    "testimonial_2_role": "مطوّر واجهة أمامية"
+  },
+  "mentors": {
+    "filters": "الفلاتر",
+    "search_mentors": "ابحث عن موجهين",
+    "search_placeholder": "الاسم أو المهارة...",
+    "technology_stack": "مجال التقنية",
+    "show_less": "🔼 عرض أقل",
+    "show_more": "🔽 عرض المزيد (+{{count}})",
+    "minimum_rating": "أقل تقييم",
+    "clear_rating_filter": "مسح فلتر التقييم",
+    "session_price": "سعر الجلسة",
+    "sort_by": "ترتيب حسب:",
+    "sort": {
+      "highest_rated": "الأعلى تقييماً",
+      "price_low_to_high": "السعر من الأقل للأعلى",
+      "price_high_to_low": "السعر من الأعلى للأقل"
+    },
+    "discovery_title": "اكتشف",
+    "showing_results": "عرض {{count}} موجهين يطابقون معاييرك",
+    "full_stack": "فول ستاك",
+    "profile": "الملف الشخصي",
+    "book_now": "احجز الآن",
+    "load_more_mentors": "🔄 تحميل المزيد",
+    "no_matches": "لا يوجد موجهين يطابقون معاييرك حالياً.",
+    "profile_fallback_title": "مهندس أول",
+    "profile_fallback_bio": "لا توجد سيرة ذاتية متوفرة."
+  },
+  "mentorProfile": {
+    "loading": "جارٍ تحميل الملف...",
+    "not_found": "الموجه غير موجود.",
+    "about_me": "عني",
+    "weekly_availability": "التوفر الأسبوعي",
+    "client_reviews": "تقييمات العملاء",
+    "book_session": "احجز جلسة →",
+    "average_rating": "متوسط التقييم",
+    "status": "الحالة",
+    "status_available": "متاح",
+    "status_pending": "قيد الانتظار",
+    "full_stack": "فول ستاك",
+    "verified_expert": "خبير موثّق",
+    "no_bio": "لا توجد سيرة ذاتية متاحة.",
+    "no_reviews": "لا توجد تقييمات حتى الآن.",
+    "student_placeholder": "طالب"
+  },
   "errors": {
     "not_found_subtitle": "الصفحة غير موجودة",
     "not_found_description": "الصفحة التي تبحث عنها ربما تم حذفها، أو تغير اسمها، أو أنها غير متاحة مؤقتاً.",
@@ -28,5 +100,7 @@
     "go_back_home": "العودة للرئيسية",
     "go_home": "الرئيسية",
     "retry": "إعادة المحاولة"
-  }
+  },
+  "filter_scheduled": "المجدولة",
+  "filter_canceled": "الملغاة"
 }

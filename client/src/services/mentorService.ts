@@ -4,7 +4,8 @@ import type {
   UpdateSessionStatusPayload, 
   MentorAvailability, 
   MentorDashboardData,
-  CreateAvailabilityPayload
+  CreateAvailabilityPayload,
+  MentorProfile
 } from '../types/mentor.types'
 
 export const getMentorSessions = async (mentorId: number): Promise<ReviewSession[]> => {
@@ -51,4 +52,19 @@ export const updateAvailability = async (
 
 export const deleteAvailability = async (id: number): Promise<void> => {
   await api.delete(`/availability/${id}`)
+}
+
+export const getMentors = async (params?: { search?: string; stackId?: number }) => {
+  const response = await api.get('/mentors', { params })
+  return response.data
+}
+
+export const getMentorById = async (id: number | string): Promise<MentorProfile> => {
+  const response = await api.get(`/mentors/${id}`)
+  return response.data
+}
+
+export const getStacks = async () => {
+  const response = await api.get('/stacks')
+  return response.data
 }

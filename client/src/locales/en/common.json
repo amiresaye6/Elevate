@@ -18,6 +18,78 @@
   "footer": {
     "all_rights_reserved": "All rights reserved."
   },
+  "discover": {
+    "tagline": "Elevate Your Engineering Journey",
+    "hero_prefix": "The",
+    "hero_highlight": "IDE",
+    "hero_suffix": "for Mentorship",
+    "hero_subtitle": "Connect with elite engineering mentors from top-tier tech companies. Debug your career, architect your future, and compile success with personalized 1-on-1 guidance.",
+    "find_your_mentor": "Find Your Mentor →"
+  },
+  "home": {
+    "stats": {
+      "expert_mentors": "Expert Mentors",
+      "sessions_completed": "Sessions Completed",
+      "average_rating": "Average Rating"
+    },
+    "featured_title": "Featured Mentors",
+    "featured_subtitle": "Browse top mentors curated to help you grow your career.",
+    "view_all_mentors": "View All Mentors",
+    "no_mentors_found": "No mentors found. Run your seeds or check backend.",
+    "profile_fallback_title": "Principal Engineer",
+    "profile_fallback_bio": "No biography provided.",
+    "view_profile": "View Profile",
+    "testimonial_section_title": "Trusted by engineers everywhere",
+    "testimonial_1": "My sessions helped me land an interview at a FAANG company in just three weeks.",
+    "testimonial_1_author": "Aisha K.",
+    "testimonial_1_role": "Software Engineer",
+    "testimonial_2": "The mentor guidance made my portfolio and interview prep airtight.",
+    "testimonial_2_author": "Omar E.",
+    "testimonial_2_role": "Frontend Developer"
+  },
+  "mentors": {
+    "filters": "Filters",
+    "search_mentors": "Search Mentors",
+    "search_placeholder": "Name or skill...",
+    "technology_stack": "Technology Stack",
+    "show_less": "🔼 Show Less",
+    "show_more": "🔽 Show More (+{{count}})",
+    "minimum_rating": "Minimum Rating",
+    "clear_rating_filter": "Clear Rating Filter",
+    "session_price": "Session Price",
+    "sort_by": "Sort by:",
+    "sort": {
+      "highest_rated": "Highest Rated",
+      "price_low_to_high": "Price: Low to High",
+      "price_high_to_low": "Price: High to Low"
+    },
+    "discovery_title": "Discovery",
+    "showing_results": "Showing {{count}} mentors matching your criteria",
+    "full_stack": "Full Stack",
+    "profile": "Profile",
+    "book_now": "Book Now",
+    "load_more_mentors": "🔄 Load More Mentors",
+    "no_matches": "No mentors match your current filter criteria.",
+    "profile_fallback_title": "Principal Engineer",
+    "profile_fallback_bio": "No biography provided."
+  },
+  "mentorProfile": {
+    "loading": "Loading profile...",
+    "not_found": "Mentor not found.",
+    "about_me": "About Me",
+    "weekly_availability": "Weekly Availability",
+    "client_reviews": "Client Reviews",
+    "book_session": "Book Session →",
+    "average_rating": "Average Rating",
+    "status": "Status",
+    "status_available": "Available",
+    "status_pending": "Pending",
+    "full_stack": "Full Stack",
+    "verified_expert": "Verified Expert",
+    "no_bio": "No biography available.",
+    "no_reviews": "No reviews found yet.",
+    "student_placeholder": "Student"
+  },
   "errors": {
     "not_found_subtitle": "Page Not Found",
     "not_found_description": "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.",
@@ -28,5 +100,7 @@
     "go_back_home": "Go Back Home",
     "go_home": "Go Home",
     "retry": "Retry Connection"
-  }
+  },
+  "filter_scheduled": "Scheduled",
+  "filter_canceled": "Canceled"
 }
