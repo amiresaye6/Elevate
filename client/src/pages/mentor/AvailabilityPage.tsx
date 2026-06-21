@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useAppDispatch, useAppSelector } from '../../store'
 import { fetchAvailability } from '../../store/slices/mentorSlice'
+import authService from '../../services/authService' 
 import {
   createAvailability,
   updateAvailability,
@@ -25,24 +26,50 @@ const EMPTY_FORM = {
 
 export default function AvailabilityPage() {
   const dispatch = useAppDispatch()
-  const { user } = useAppSelector((s) => s.auth)
-  const MENTOR_ID = user?.mentorProfileId ?? 1
+  // const { user } = useAppSelector((s) => s.auth)
+  // const MENTOR_ID = user?.mentorProfileId ?? 1
 
   const { availability, loading, error } = useAppSelector((s) => s.mentor)
-
+  const [mentorId, setMentorId] = useState<number | null>(null)
   const [form, setForm] = useState<CreateAvailabilityPayload>({
-    mentorId: MENTOR_ID,
+    mentorId: 0,
     ...EMPTY_FORM,
   })
+
+  // const [form, setForm] = useState<CreateAvailabilityPayload>({
+  //   mentorId: MENTOR_ID,
+  //   ...EMPTY_FORM,
+  // })
   const [editingId, setEditingId] = useState<number | null>(null)
   const [submitting, setSubmitting] = useState(false)
 
+  // useEffect(() => {
+  //   if (MENTOR_ID) {
+  //     setForm((p) => ({ ...p, mentorId: MENTOR_ID }))
+  //   }
+  //   dispatch(fetchAvailability(MENTOR_ID))
+  // }, [dispatch, MENTOR_ID])
   useEffect(() => {
-    if (MENTOR_ID) {
-      setForm((p) => ({ ...p, mentorId: MENTOR_ID }))
+    const loadMentorProfile = async () => {
+      try {
+        const res = await authService.getProfile()
+        const realMentorId = (res.data as any)?.profile?.id
+        if (realMentorId) {
+          setMentorId(realMentorId)
+          setForm((p) => ({ ...p, mentorId: realMentorId }))
+        }
+      } catch {
+        toast.error('Failed to load mentor profile')
+      }
     }
-    dispatch(fetchAvailability(MENTOR_ID))
-  }, [dispatch, MENTOR_ID])
+    loadMentorProfile()
+  }, [])
+
+  useEffect(() => {
+    if (mentorId) {
+      dispatch(fetchAvailability(mentorId))
+    }
+  }, [dispatch, mentorId])
 
   const handleSubmit = async () => {
     if (!form.dayOfWeek || !form.startTime || !form.endTime) {
@@ -62,9 +89,10 @@ export default function AvailabilityPage() {
         await createAvailability(form)
         toast.success('Slot added successfully')
       }
-      setForm({ mentorId: MENTOR_ID, ...EMPTY_FORM })
+      setForm({ mentorId: mentorId ?? 0, ...EMPTY_FORM })
       setEditingId(null)
-      dispatch(fetchAvailability(MENTOR_ID))
+      // dispatch(fetchAvailability(MENTOR_ID))
+      if (mentorId) dispatch(fetchAvailability(mentorId))
     } catch {
       toast.error('Something went wrong')
     } finally {
@@ -86,7 +114,8 @@ export default function AvailabilityPage() {
     try {
       await deleteAvailability(id)
       toast.success('Slot deleted')
-      dispatch(fetchAvailability(MENTOR_ID))
+      // dispatch(fetchAvailability(MENTOR_ID))
+       if (mentorId) dispatch(fetchAvailability(mentorId))
     } catch {
       toast.error('Failed to delete slot')
     }
@@ -213,7 +242,7 @@ export default function AvailabilityPage() {
           </button>
           {editingId !== null && (
             <button
-              onClick={() => { setForm({ mentorId: MENTOR_ID, ...EMPTY_FORM }); setEditingId(null) }}
+              onClick={() => { setForm({ mentorId: mentorId ?? 0, ...EMPTY_FORM }); setEditingId(null) }}
               className="px-5 py-2.5 rounded-lg text-sm font-medium border transition-all hover:opacity-70"
               style={{
                 border: '1px solid #464554',
