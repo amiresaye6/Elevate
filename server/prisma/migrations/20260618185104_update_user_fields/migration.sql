@@ -5,7 +5,7 @@
 
 */
 -- AlterTable
-ALTER TABLE `user` ADD COLUMN `authProvider` VARCHAR(191) NOT NULL DEFAULT 'local',
+ALTER TABLE `User` ADD COLUMN `authProvider` VARCHAR(191) NOT NULL DEFAULT 'local',
     ADD COLUMN `googleId` VARCHAR(191) NULL,
     ADD COLUMN `profilePicture` VARCHAR(191) NULL,
     MODIFY `password` VARCHAR(191) NULL;
