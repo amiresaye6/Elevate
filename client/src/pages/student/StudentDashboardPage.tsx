@@ -49,7 +49,7 @@ const StudentDashboardPage: React.FC = () => {
   const isRtl = i18n.language.startsWith('ar')
 
   // States
-  const [studentName, setStudentName] = useState('Amir Alsayed')
+  const [studentName, setStudentName] = useState('Student')
   const [totalSessions, setTotalSessions] = useState(0)
   const [upcomingCount, setUpcomingCount] = useState(0)
   const [completedCount, setCompletedCount] = useState(0)
