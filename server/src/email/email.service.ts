@@ -55,7 +55,11 @@ export class EmailService {
 To: ${to}
 Subject: ${subject}
 --------------------------------------------------
-${html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().substring(0, 200)}...
+${html
+  .replace(/<[^>]*>/g, ' ')
+  .replace(/\s+/g, ' ')
+  .trim()
+  .substring(0, 200)}...
 --------------------------------------------------`,
       );
       return true;

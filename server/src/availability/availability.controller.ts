@@ -30,21 +30,17 @@ interface RequestWithUser extends Request {
 
 @Controller('availability')
 export class AvailabilityController {
-  constructor(
-    private readonly availabilityService: AvailabilityService,
-  ) {}
+  constructor(private readonly availabilityService: AvailabilityService) {}
 
   @Get()
   findAll(@Query('mentorId', ParseIntPipe) mentorId: number) {
     return this.availabilityService.findAllByMentor(mentorId);
   }
 
-
   @Post()
   create(@Body() dto: CreateAvailabilityDto) {
     return this.availabilityService.create(dto);
   }
-
 
   @UseGuards(JwtAuthGuard)
   @Put(':id')
@@ -53,25 +49,17 @@ export class AvailabilityController {
     @Body() dto: UpdateAvailabilityDto,
     @Request() req: RequestWithUser,
   ) {
-    return this.availabilityService.update(
-      id,
-      dto,
-      req.user.id,
-    );
+    return this.availabilityService.update(id, dto, req.user.id);
   }
-
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(
     @Param('id', ParseIntPipe) id: number,
-    
+
     @Request() req: RequestWithUser,
   ) {
-    console.log("TOKEN USER =>", req.user);
-    return this.availabilityService.remove(
-      id,
-      req.user.id,
-    );
+    console.log('TOKEN USER =>', req.user);
+    return this.availabilityService.remove(id, req.user.id);
   }
 }

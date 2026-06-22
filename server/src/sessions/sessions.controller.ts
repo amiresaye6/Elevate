@@ -31,12 +31,12 @@ export class SessionsController {
   @Post('book')
   async bookSession(
     @CurrentUser() user: { id: number; email: string; role: Role },
-    @Body() dto: BookSessionDto
+    @Body() dto: BookSessionDto,
   ) {
     if (user.role !== Role.STUDENT) {
       throw new ForbiddenException('Only students can book sessions.');
     }
-    
+
     // Resolve student profile from user id
     const student = await this.prisma.studentProfile.findUnique({
       where: { userId: user.id },
@@ -44,7 +44,7 @@ export class SessionsController {
     if (!student) {
       throw new NotFoundException('Student profile not found.');
     }
-    
+
     dto.studentId = student.id;
     return await this.sessionsService.bookSession(dto);
   }
@@ -79,7 +79,9 @@ export class SessionsController {
       }
       resolvedProfileId = mentor.id;
     } else {
-      throw new ForbiddenException('Administrators cannot view session history.');
+      throw new ForbiddenException(
+        'Administrators cannot view session history.',
+      );
     }
 
     return await this.sessionsService.getMySessions(
@@ -99,21 +101,25 @@ export class SessionsController {
   ) {
     const sessionRes = await this.sessionsService.getSessionById(id);
     const session = sessionRes.data;
-    
+
     // Access check: Only the booking student, assigned mentor, or admin can view details
     if (user.role === Role.STUDENT) {
       const student = await this.prisma.studentProfile.findUnique({
         where: { userId: user.id },
       });
       if (!student || session.studentId !== student.id) {
-        throw new ForbiddenException('You are not authorized to view this session.');
+        throw new ForbiddenException(
+          'You are not authorized to view this session.',
+        );
       }
     } else if (user.role === Role.MENTOR) {
       const mentor = await this.prisma.mentorProfile.findUnique({
         where: { userId: user.id },
       });
       if (!mentor || session.mentorId !== mentor.id) {
-        throw new ForbiddenException('You are not authorized to view this session.');
+        throw new ForbiddenException(
+          'You are not authorized to view this session.',
+        );
       }
     }
 
@@ -149,7 +155,9 @@ export class SessionsController {
       }
       resolvedProfileId = mentor.id;
     } else {
-      throw new ForbiddenException('Administrators cannot modify session status.');
+      throw new ForbiddenException(
+        'Administrators cannot modify session status.',
+      );
     }
 
     const updatedSession = await this.sessionsService.updateSessionStatus(
@@ -185,14 +193,18 @@ export class SessionsController {
         where: { userId: user.id },
       });
       if (!student || session.studentId !== student.id) {
-        throw new ForbiddenException('You are not authorized to view this session audit.');
+        throw new ForbiddenException(
+          'You are not authorized to view this session audit.',
+        );
       }
     } else if (user.role === Role.MENTOR) {
       const mentor = await this.prisma.mentorProfile.findUnique({
         where: { userId: user.id },
       });
       if (!mentor || session.mentorId !== mentor.id) {
-        throw new ForbiddenException('You are not authorized to view this session audit.');
+        throw new ForbiddenException(
+          'You are not authorized to view this session audit.',
+        );
       }
     }
 

@@ -36,7 +36,10 @@ export class EmailWorker implements OnModuleInit {
               channel.ack(msg);
               this.logger.log('✅ Job completed and acknowledged');
             } catch (error: any) {
-              this.logger.error('❌ Error processing email job:', error.message || error);
+              this.logger.error(
+                '❌ Error processing email job:',
+                error.message || error,
+              );
               // Requeue the message for retry
               channel.nack(msg, false, true);
               this.logger.warn('⚠️ Job rejected and requeued for retry');
@@ -52,4 +55,3 @@ export class EmailWorker implements OnModuleInit {
     }
   }
 }
-

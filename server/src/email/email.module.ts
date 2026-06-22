@@ -12,4 +12,3 @@ import { RabbitMqService } from './rabbitmq.service';
   exports: [EmailService, QueueService, RabbitMqService],
 })
 export class EmailModule {}
-

@@ -13,5 +13,5 @@ export class MentorsController {
   @Get(':id/dashboard')
   getDashboard(@Param('id', ParseIntPipe) id: number) {
     return this.mentorsService.getDashboard(id);
-  }  
+  }
 }

@@ -1,6 +1,17 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { StacksService } from './stacks.service';
-import { createStackDto,updateStackDto } from './dto/Stack.dto'
+import { createStackDto, updateStackDto } from './dto/Stack.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
@@ -14,49 +25,50 @@ export class StacksController {
     if (!page) {
       return await this.stacksService.getAll();
     }
-    const data= await this.stacksService.getAllStacksWithPagination(page);
-    return{
-      success:true,
-      message:"stacks fetched successfully",
-      data
-    }
+    const data = await this.stacksService.getAllStacksWithPagination(page);
+    return {
+      success: true,
+      message: 'stacks fetched successfully',
+      data,
+    };
   }
 
-
-  @UseGuards(JwtAuthGuard,RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
   @Post()
-  async createStack(@Body()data:createStackDto){
+  async createStack(@Body() data: createStackDto) {
     const stack = await this.stacksService.createStack(data);
     return {
-      success:true,
-      message:"stack has been created successfully",
-      data:{stack}
+      success: true,
+      message: 'stack has been created successfully',
+      data: { stack },
     };
   }
 
-  @UseGuards(JwtAuthGuard,RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
   @Patch(':id')
-  async updateStack(@Param('id',ParseIntPipe)id:number, @Body()data:updateStackDto){
-    const stack = await this.stacksService.updateStack(id,data);
+  async updateStack(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: updateStackDto,
+  ) {
+    const stack = await this.stacksService.updateStack(id, data);
     return {
-      success:true,
-      message:"stack has been updated successfully",
-      data:{stack}
+      success: true,
+      message: 'stack has been updated successfully',
+      data: { stack },
     };
   }
 
-  @UseGuards(JwtAuthGuard,RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('ADMIN')
   @Delete(':id')
-  async deleteStack(@Param('id',ParseIntPipe)id:number){
+  async deleteStack(@Param('id', ParseIntPipe) id: number) {
     const stack = await this.stacksService.deleteStack(id);
     return {
-      success:true,
-      message:"stack has been deleted successfully",
-      data:{stack}
+      success: true,
+      message: 'stack has been deleted successfully',
+      data: { stack },
     };
   }
 }
-

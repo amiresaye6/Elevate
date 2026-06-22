@@ -77,11 +77,14 @@ Session Description: "${description}"
 
             if (!response.ok) {
               const errBody = await response.json().catch(() => ({}));
-              throw new Error(`Gemini model ${model} returned status ${response.status}: ${JSON.stringify(errBody)}`);
+              throw new Error(
+                `Gemini model ${model} returned status ${response.status}: ${JSON.stringify(errBody)}`,
+              );
             }
 
             const result = await response.json();
-            const text = result?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            const text =
+              result?.candidates?.[0]?.content?.parts?.[0]?.text || '';
             const jsonText = text.replace(/```json|```/g, '').trim();
             parsedResponse = JSON.parse(jsonText);
             break; // Success! Break out of retry loop

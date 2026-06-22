@@ -7,6 +7,6 @@ import { PrismaModule } from '../prisma/prisma.module';
   imports: [PrismaModule],
   controllers: [AvailabilityController],
   providers: [AvailabilityService],
-  exports: [AvailabilityService], 
+  exports: [AvailabilityService],
 })
 export class AvailabilityModule {}

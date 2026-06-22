@@ -9,10 +9,10 @@ import { UpdateAvailabilityDto } from './dto/availability.dto';
 
 @Injectable()
 export class AvailabilityService {
-  constructor(private readonly prisma: PrismaService) {} 
+  constructor(private readonly prisma: PrismaService) {}
 
   async findAllByMentor(mentorId: number) {
-    return this.prisma.mentorAvailability.findMany({ 
+    return this.prisma.mentorAvailability.findMany({
       where: { mentorId },
       orderBy: { dayOfWeek: 'asc' },
     });
@@ -72,74 +72,67 @@ export class AvailabilityService {
   //   await this.prisma.mentorAvailability.delete({ where: { id } });
   //   return { message: `Availability slot #${id} deleted successfully` };
   // }
-  async update(
-  id: number,
-  dto: UpdateAvailabilityDto,
-  userId: number,
-) {
-  const slot = await this.prisma.mentorAvailability.findUnique({
-    where: { id },
-  });
+  async update(id: number, dto: UpdateAvailabilityDto, userId: number) {
+    const slot = await this.prisma.mentorAvailability.findUnique({
+      where: { id },
+    });
 
-  if (!slot) {
-    throw new NotFoundException(`Availability slot #${id} not found`);
+    if (!slot) {
+      throw new NotFoundException(`Availability slot #${id} not found`);
+    }
+
+    const mentor = await this.prisma.mentorProfile.findUnique({
+      where: {
+        userId,
+      },
+    });
+
+    if (!mentor) {
+      throw new ForbiddenException('Mentor profile not found');
+    }
+
+    if (slot.mentorId !== mentor.id) {
+      throw new ForbiddenException(
+        'You cannot modify another mentor availability slot',
+      );
+    }
+
+    return this.prisma.mentorAvailability.update({
+      where: { id },
+      data: { ...dto },
+    });
   }
+  async remove(id: number, userId: number) {
+    const slot = await this.prisma.mentorAvailability.findUnique({
+      where: { id },
+    });
 
-  const mentor = await this.prisma.mentorProfile.findUnique({
-    where: {
-      userId,
-    },
-  });
+    if (!slot) {
+      throw new NotFoundException(`Availability slot #${id} not found`);
+    }
 
-  if (!mentor) {
-    throw new ForbiddenException('Mentor profile not found');
+    const mentor = await this.prisma.mentorProfile.findUnique({
+      where: {
+        userId,
+      },
+    });
+
+    if (!mentor) {
+      throw new ForbiddenException('Mentor profile not found');
+    }
+
+    if (slot.mentorId !== mentor.id) {
+      throw new ForbiddenException(
+        'You cannot delete another mentor availability slot',
+      );
+    }
+
+    await this.prisma.mentorAvailability.delete({
+      where: { id },
+    });
+
+    return {
+      message: `Availability slot #${id} deleted successfully`,
+    };
   }
-
-  if (slot.mentorId !== mentor.id) {
-    throw new ForbiddenException(
-      'You cannot modify another mentor availability slot',
-    );
-  }
-
-  return this.prisma.mentorAvailability.update({
-    where: { id },
-    data: { ...dto },
-  });
-}
-async remove(
-  id: number,
-  userId: number,
-) {
-  const slot = await this.prisma.mentorAvailability.findUnique({
-    where: { id },
-  });
-
-  if (!slot) {
-    throw new NotFoundException(`Availability slot #${id} not found`);
-  }
-
-  const mentor = await this.prisma.mentorProfile.findUnique({
-    where: {
-      userId,
-    },
-  });
-
-  if (!mentor) {
-    throw new ForbiddenException('Mentor profile not found');
-  }
-
-  if (slot.mentorId !== mentor.id) {
-    throw new ForbiddenException(
-      'You cannot delete another mentor availability slot',
-    );
-  }
-
-  await this.prisma.mentorAvailability.delete({
-    where: { id },
-  });
-
-  return {
-    message: `Availability slot #${id} deleted successfully`,
-  };
-}
 }

@@ -11,7 +11,9 @@ describe('MentorDiscoveryController', () => {
       providers: [MentorDiscoveryService],
     }).compile();
 
-    controller = module.get<MentorDiscoveryController>(MentorDiscoveryController);
+    controller = module.get<MentorDiscoveryController>(
+      MentorDiscoveryController,
+    );
   });
 
   it('should be defined', () => {

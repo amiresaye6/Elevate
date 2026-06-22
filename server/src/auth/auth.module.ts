@@ -11,7 +11,9 @@ import { RolesGuard } from './roles.guard';
     PrismaModule,
     JwtModule.register({
       global: true,
-      secret: process.env.JWT_SECRET || 'be7cf5fc78e1f28efa6d88332b262921393f43fd49d0c99c725e4821226a2989',
+      secret:
+        process.env.JWT_SECRET ||
+        'be7cf5fc78e1f28efa6d88332b262921393f43fd49d0c99c725e4821226a2989',
       signOptions: { expiresIn: '24h' },
     }),
   ],

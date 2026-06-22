@@ -1,4 +1,9 @@
-import { Injectable, OnModuleInit, OnModuleDestroy, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  OnModuleInit,
+  OnModuleDestroy,
+  Logger,
+} from '@nestjs/common';
 import * as amqp from 'amqplib';
 
 @Injectable()
@@ -37,7 +42,6 @@ export class RabbitMqService implements OnModuleInit, OnModuleDestroy {
       this.logger.error('❌ Failed to connect to RabbitMQ:', error);
     }
   }
-
 
   async getChannel(): Promise<amqp.Channel> {
     if (!this.channel) {

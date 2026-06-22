@@ -116,11 +116,15 @@ export class AuthService {
     }
 
     if (user.isBlocked) {
-      throw new ForbiddenException('Your account has been blocked by administrators');
+      throw new ForbiddenException(
+        'Your account has been blocked by administrators',
+      );
     }
 
     if (!user.password) {
-      throw new UnauthorizedException('Please sign in using your Google account');
+      throw new UnauthorizedException(
+        'Please sign in using your Google account',
+      );
     }
 
     const isPasswordValid = await bcrypt.compare(dto.password, user.password);
@@ -256,7 +260,10 @@ export class AuthService {
       );
     }
 
-    const isPasswordValid = await bcrypt.compare(dto.oldPassword, user.password);
+    const isPasswordValid = await bcrypt.compare(
+      dto.oldPassword,
+      user.password,
+    );
     if (!isPasswordValid) {
       throw new BadRequestException('Incorrect current password');
     }
@@ -285,7 +292,7 @@ export class AuthService {
 
     if (user) {
       const resetToken = crypto.randomBytes(32).toString('hex');
-      const resetTokenExp = new Date(Date.now() + 3600000); 
+      const resetTokenExp = new Date(Date.now() + 3600000);
 
       await this.prisma.user.update({
         where: { id: user.id },
@@ -364,10 +371,9 @@ export class AuthService {
       throw new UnauthorizedException('Failed to authenticate with Google');
     }
 
-    const tokenData = (await tokenResponse.json()) as any;
+    const tokenData = await tokenResponse.json();
     const access_token = tokenData.access_token;
     const id_token = tokenData.id_token;
-
 
     const userinfoResponse = await fetch(
       `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`,
@@ -384,9 +390,8 @@ export class AuthService {
       throw new UnauthorizedException('Failed to fetch Google user info');
     }
 
-    const profile = (await userinfoResponse.json()) as any;
+    const profile = await userinfoResponse.json();
 
-   
     let user = await this.prisma.user.findUnique({
       where: { email: profile.email },
       include: {
@@ -419,19 +424,21 @@ export class AuthService {
         },
       });
 
-      
       try {
-        const welcomeHtml = this.emailService.getWelcomeTemplate(profile.name || 'Google User');
+        const welcomeHtml = this.emailService.getWelcomeTemplate(
+          profile.name || 'Google User',
+        );
         await this.queueService.queueEmail(
           user.email,
           'Welcome to Elivate!',
           welcomeHtml,
         );
       } catch (emailError: any) {
-        this.logger.error(`Failed to send welcome email for Google user: ${emailError.message}`);
+        this.logger.error(
+          `Failed to send welcome email for Google user: ${emailError.message}`,
+        );
       }
     } else {
-     
       if (!user.googleId) {
         user = await this.prisma.user.update({
           where: { id: user.id },
@@ -449,9 +456,10 @@ export class AuthService {
     }
 
     if (user.isBlocked) {
-      throw new ForbiddenException('Your account has been blocked by administrators');
+      throw new ForbiddenException(
+        'Your account has been blocked by administrators',
+      );
     }
-
 
     const payload = {
       id: user.id,
@@ -478,4 +486,3 @@ export class AuthService {
     };
   }
 }
-
