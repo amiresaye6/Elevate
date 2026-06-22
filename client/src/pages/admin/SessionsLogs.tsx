@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { api } from '../../services/api'
 import { useAppDispatch, useAppSelector } from '../../store/index'
 import { fetchAdminSessions } from '../../store/slices/adminSlice'
-import { Search, Calendar, Clock, ArrowLeft, ArrowRight, ShieldAlert, RotateCcw, FileText } from 'lucide-react'
+import { Search, Calendar, Clock, ArrowLeft, ArrowRight, ShieldAlert, RotateCcw } from 'lucide-react'
 
 interface Session {
   id: number;

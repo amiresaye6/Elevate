@@ -28,7 +28,6 @@ const ControlUsers: React.FC = () => {
     const { t, i18n } = useTranslation(['admin']);
     const isRtl = i18n.language.startsWith('ar');
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(0);
     const [searchId, setSearchId] = useState('');
     const [searchEmail, setSearchEmail] = useState('');
     const [searchedUser, setSearchedUser] = useState<User | null>(null);

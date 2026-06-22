@@ -20,8 +20,8 @@ interface Session {
 }
 
 interface AdminState {
-  users: any[];
-  sessions: any[];
+  users: User[];
+  sessions: Session[];
   usersPagination: {
     page: number;
     limit: number;
