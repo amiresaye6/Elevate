@@ -145,11 +145,21 @@ export class SessionsService {
         },
       });
 
-      // Call classifier (Gemini / Local fallback)
-      const classification = await this.auditService.classifySession(
-        description,
-        mentor.stack.name,
-      );
+      // Call classifier (Gemini / Local fallback) with graceful fail-soft fallback
+      let classification;
+      try {
+        classification = await this.auditService.classifySession(
+          description,
+          mentor.stack.name,
+        );
+      } catch (err) {
+        console.error('AI Classification failed, using default fallback:', err);
+        classification = {
+          predictedTag: mentor.stack.name,
+          confidenceScore: 0.5,
+          status: 'FAILED',
+        };
+      }
 
       // Create Session Audit Log
       await tx.sessionAuditLog.create({
