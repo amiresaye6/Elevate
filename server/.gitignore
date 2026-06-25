@@ -43,3 +43,5 @@ lerna-debug.log*
 
 # Docker files
 docker-compose.yml
+
+ngrok.exe

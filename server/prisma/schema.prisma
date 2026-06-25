@@ -18,6 +18,18 @@ enum SessionStatus {
   CANCELED
 }
 
+enum PaymentType {
+  DEPOSIT  
+  WITHDRAW 
+  REFUND 
+}
+
+enum PaymentStatus {
+  PENDING 
+  SUCCESS
+  FAILED
+}
+
 model User {
   id              Int              @id @default(autoincrement())
   email           String           @unique
@@ -33,6 +45,8 @@ model User {
 
   studentProfile  StudentProfile?
   mentorProfile   MentorProfile?
+
+  paymentLogs     PaymentLog[]
 }
 
 model StudentProfile {
@@ -98,6 +112,7 @@ model ReviewSession {
   mentor             MentorProfile    @relation(fields: [mentorId], references: [id])
   student            StudentProfile   @relation(fields: [studentId], references: [id])
   auditLog           SessionAuditLog?
+  paymentLogs        PaymentLog[]
 }
 
 model SessionAuditLog {
@@ -112,4 +127,22 @@ model SessionAuditLog {
   session            ReviewSession  @relation(fields: [sessionId], references: [id])
 }
 
+
+model PaymentLog {
+  id               Int           @id @default(autoincrement())
+  sessionId        Int
+  userId           Int
+  type             PaymentType
+  status           PaymentStatus @default(PENDING)
+  amount           Decimal       @db.Decimal(10, 2)
+  currency         String        @default("EGP")
+  paymobOrderId    String?       @unique 
+  paymobTxnId      String?       @unique
+  rawResponse      Json?         
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  session          ReviewSession @relation(fields: [sessionId], references: [id])
+  user             User          @relation(fields: [userId], references: [id])
+}
 

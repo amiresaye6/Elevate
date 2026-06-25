@@ -226,6 +226,7 @@ const BookingFlowPage: React.FC = () => {
     }
 
     setBooking(true)
+    
     try {
       // Build ISO Date: selectedDate (YYYY-MM-DD) + selectedTimeSlot (HH:MM)
       const year = selectedDate.getFullYear()
@@ -239,10 +240,13 @@ const BookingFlowPage: React.FC = () => {
         startTime: startTimeISO,
         description: description
       })
-
+      //console.log(response);
       if (response.data && response.data.success) {
-        toast.success(t('toast_booking_success'))
-        navigate('/student/sessions')
+        const paymobResponse= await api.post('payment/checkout',{
+          sessionId:response.data.data.sessionId
+        })
+        //toast.success(t('toast_booking_success'))
+        //navigate('/student/sessions')
       } else {
         throw new Error('Booking failed')
       }

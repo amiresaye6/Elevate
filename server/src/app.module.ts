@@ -14,6 +14,8 @@ import { AuditModule } from './audit/audit.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { EmailModule } from './email/email.module';
 import { MentorDiscoveryModule } from './mentor-discovery/mentor-discovery.module';
+import { PaymentModule } from './payment/payment.module';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -30,6 +32,8 @@ import { MentorDiscoveryModule } from './mentor-discovery/mentor-discovery.modul
     AuditModule,
     EmailModule,
     MentorDiscoveryModule,
+    PaymentModule,
+    HttpModule
   ],
   controllers: [AppController],
   providers: [AppService],
