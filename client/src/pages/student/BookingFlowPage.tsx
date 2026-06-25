@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { api } from '../../services/api'
 import { toast } from 'react-hot-toast'
+import { useSearchParams } from 'react-router-dom';
 import {
   Video,
   Clock,
@@ -58,6 +59,15 @@ const BookingFlowPage: React.FC = () => {
   
   // Description/Goals
   const [description, setDescription] = useState('')
+
+  const [searchParams] = useSearchParams();
+  const successParam = searchParams.get('success');
+
+    if (successParam === 'true') {
+      toast.success(t('toast_booking_success'));
+    } else if (successParam === 'false') {
+      t('toast_booking_error');
+    }
 
   // Load Mentor Schedule
   const fetchMentor = async () => {
@@ -242,11 +252,17 @@ const BookingFlowPage: React.FC = () => {
       })
       //console.log(response);
       if (response.data && response.data.success) {
-        const paymobResponse= await api.post('payment/checkout',{
+        const paymobResponse = await api.post('payment/checkout',{
           sessionId:response.data.data.sessionId
-        })
-        //toast.success(t('toast_booking_success'))
-        //navigate('/student/sessions')
+        });
+        const clientSecret =paymobResponse.data.data.clientSecret;
+        const paymentToken =paymobResponse.data.data.paymentToken;
+        console.log(clientSecret);
+        console.log(paymentToken);
+        console.log(paymobResponse);
+        const url =`https://accept.paymob.com/api/acceptance/iframes/1055519?payment_token=${paymentToken}`
+        window.location.href = url;
+        
       } else {
         throw new Error('Booking failed')
       }
