@@ -42,6 +42,7 @@ model User {
   authProvider    String           @default("local")
   googleId        String?          @unique
   profilePicture  String?
+  phoneNumber     String           @default("0111111111")
 
   studentProfile  StudentProfile?
   mentorProfile   MentorProfile?
