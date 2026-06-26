@@ -141,11 +141,12 @@ export class SessionsService {
           startTime: bookingStart,
           endTime: bookingEnd,
           description,
-          status: 'SCHEDULED',
+          status: 'WAIT_PAYMENT',
         },
       });
 
       // Call classifier (Gemini / Local fallback) with graceful fail-soft fallback
+      //let classification={predictedTag:"tag",confidenceScore:3.4,status:"true"};
       let classification;
       try {
         classification = await this.auditService.classifySession(

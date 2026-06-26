@@ -16,6 +16,7 @@ enum SessionStatus {
   SCHEDULED
   COMPLETED
   CANCELED
+  WAIT_PAYMENT
 }
 
 enum PaymentType {

@@ -70,7 +70,7 @@ export class PaymentService {
         "floor": "N/A",
         "state": "cairo"
       },
-      "special_reference": "PAYMENTLOGID-"+paymentLog.id,
+      "special_reference": "PAYMENTLogID-"+paymentLog.id,
       "expiration": 3600,
       "notification_url": process.env.PAYMOB_WEBHOOK_URL,
       "redirection_url": process.env.FRONTEND_URL+"/student/sessions"
@@ -80,7 +80,7 @@ export class PaymentService {
       "Content-Type": "application/json"
     };
     const url= "https://accept.paymob.com/v1/intention/";
-
+    //console.log("=== PAYLOAD SENT TO PAYMOB ===", JSON.stringify(payload, null, 2));
     try{
       const response = await this.httpService.axiosRef.post(url, payload,  {headers} );
       await this.prismaService.paymentLog.update({
@@ -92,14 +92,16 @@ export class PaymentService {
         paymentToken: response.data.payment_keys[0]?.key
       };
     }catch(error:any){
-      return ;
+      console.error("Paymob Intention Error:", error.response?.data || error.message);
+      throw new BadRequestException(`Paymob integration failed: ${error.message}`);
     }
   }
 
   async handleWebhook(payload: any) {
+    console.log(payload);
     const transaction = payload.obj;
-    const specialReference = transaction.special_reference;
-    if (!specialReference || !specialReference.startsWith('PAYMENTLOGID-')) {
+    const specialReference = transaction.order.merchant_order_id;
+    if (!specialReference) {
       return;
     }
     if (transaction.pending === true || String(transaction.pending) === 'true') {
@@ -115,6 +117,15 @@ export class PaymentService {
       },
     });
 
+    console.log(isSuccess);
+    console.log(isSuccess);
+    console.log(isSuccess);
+    console.log(isSuccess);
+    console.log(isSuccess);
+    console.log(isSuccess);
+    console.log(isSuccess);
+    console.log(isSuccess);
+    console.log(isSuccess);
     if (isSuccess) {
       await this.prismaService.reviewSession.update({
         where: { id: updatedLog.sessionId },
@@ -123,11 +134,8 @@ export class PaymentService {
         },
       });
     } else {
-      await this.prismaService.reviewSession.update({
-        where: { id: updatedLog.sessionId },
-        data: { 
-          status: 'CANCELED'
-        },
+      await this.prismaService.reviewSession.delete({
+        where: { id: updatedLog.sessionId }
       });
     }
 

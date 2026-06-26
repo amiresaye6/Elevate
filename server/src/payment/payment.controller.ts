@@ -1,4 +1,4 @@
-import { Controller, Post, Body,UseGuards, ParseIntPipe, HttpCode, HttpStatus, Query } from '@nestjs/common';
+import { Controller, Post, Body,UseGuards, ParseIntPipe, HttpCode, HttpStatus, Query, Get } from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
@@ -26,6 +26,20 @@ export class PaymentController {
   @Post('webhook')
   @HttpCode(HttpStatus.OK)
   async webhook(@Body() payload: any, @Query('hmac') hmac: string) {
+    console.log("from webhook")
+    console.log("from webhook")
+    console.log("from webhook")
+    console.log("from webhook")
+    console.log("from webhook")
+    console.log("from webhook")
+    console.log("from webhook")
+    console.log("from webhook")
+    console.log("from webhook")
+    console.log("from webhook")
+    console.log("from webhook")
+    console.log("from webhook")
+    console.log("from webhook")
+    console.log("from webhook")
     const isVerified = this.paymentService.verifyPaymobHmac(payload, hmac);
     if (!isVerified) {
       return{
@@ -36,6 +50,5 @@ export class PaymentController {
     const success =await this.paymentService.handleWebhook(payload);    
     return { success };
   }
-
   
 }

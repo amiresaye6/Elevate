@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `reviewsession` MODIFY `status` ENUM('SCHEDULED', 'COMPLETED', 'CANCELED', 'WAIT_PAYMENT') NOT NULL;
